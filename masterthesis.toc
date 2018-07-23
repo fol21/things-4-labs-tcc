@@ -1,0 +1,9 @@
+\select@language {brazil}
+\contentsline {chapter}{\hspace {1.7cm}\bfseries INTRODU\IeC {\c C}\IeC {\~A}O}{10}{chapter*.3}
+\contentsline {chapter}{\numberline {1}\bfseries \uppercase {Ind\IeC {\'u}stria 4.0 e Internet das Coisas}}{11}{chapter.1}
+\contentsline {section}{\numberline {1.1}Internet das Coisas}{11}{section.1.1}
+\contentsline {section}{\numberline {1.2}As Camadas do IoT}{11}{section.1.2}
+\contentsline {subsection}{\numberline {1.2.1}Aquisi\IeC {\c c}\IeC {\~a}o}{12}{subsection.1.2.1}
+\contentsline {subsection}{\numberline {1.2.2}Transmiss\IeC {\~a}o}{12}{subsection.1.2.2}
+\contentsline {subsection}{\numberline {1.2.3}Aplica\IeC {\c c}\IeC {\~a}o}{12}{subsection.1.2.3}
+\contentsline {chapter}{\hspace {1.7cm}\bfseries CONCLUS\IeC {\~A}O}{13}{subsection.1.2.3}
