@@ -10,7 +10,7 @@ masterthesis.out
 masterthesis.synctex.gz
 masterthesis.toc
 
-masterthesis.pdf
+# masterthesis.pdf
 
 **/*.log
 *.log
