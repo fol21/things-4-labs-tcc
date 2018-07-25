@@ -27,13 +27,79 @@ A primeira camada é a de aquisição de dados, que lida com o mundo físico e a
 \subsection{Aquisição}
 \label{subsection:aquisicao}
 
+A etapa de aquisição está inserida diretamente no contexto de dados físicos, geralmente são hardwares menos complexos, focados em processamento de dados e entrada e saída com conversão analógico-digital. Se comunicam com sensores ou centrais de controle lógico. São responsáveis por:
 
+\begin{itemize}
+	\item Receber dados de sensores;
+	\item conversão A/D;
+	\item Processamento e calibragem de valores;
+	\item Envio de dados em tempo real;
+\end{itemize} 
+
+Para atender essas tarefas, não é necessário grande poder de processamento, microcontroladores ou microprocessadores são capazes de atender tais necessidades se acompanhados de módulos de rede e portas I/O, assim como a implementação do software. Veremos dois exemplos no capítulo de implementação do projeto, que utilizam tanto MCU (Micro-Controller Units) ou Consoles com Sistemas Operacionais leves.
+ 
 
 \subsection{Transmissão}
 \label{subsection:transmicao}
 
+Esta camada é o coração do IoT. A forma de transmissão define quais dispositivos eletrônicos e qual sua especificação técnica necessária para os quesitos de transmissão. Também define como os softwares da camada de aplicação e aquisição devem ser implementados baseado na estrutura da pilha de rede que será usada para transmitir.
+
+Na próxima seção, veremos sobre a camada de rede e suas diversas formas de implementação. É importante que esta camada seja definida da melhor forma a atender sua aplicação, atendendo aspectos: 
+\begin{itemize}
+\item quantidade de dados transmitido;
+\item número de acessos; 
+\item distância entre dispositivos;
+\item segurança;
+\end{itemize}
+
 \subsection{Aplicação}
 \label{subsection:aplicacao}
+
+A camada de aplicação encabeça a pilha do IoT. É ela que de fato trata os dados e realiza as aplicações deste. Ela disponibiliza os dados para o mundo real, podendo exercer múltiplas funções simultâneas incluindo:
+
+\begin{itemize}
+\item Armazenamento e Análise;
+\item Visualização; 
+\item Inteligência e aprendizado;
+\item Serviços e servidores;
+\item Gerenciamento e configuração;
+\end{itemize}
+
+Nesta camada estão presentes os endpoints apontados pela camada de aquisiçao, o destino dos dados. Bem assim como os servidores que gerenciam os clientes (geralmente implementados na camada de aquisição) e serviços e configurações oferecidos pelo sistema em si.
+
+\section{Camadas de Rede}
+\label{section:camadas_de_rede}
+
+Como visto anteriormente, a camada de transmissão basicamente define a infraestrutura do sistema. Ela é construído com as camadas de rede como base. Portanto definir as camadas de rede e seus protocolos é definir a camada de transmissão em si.
+
+Redes de computadores são complexas com diferentes aspectos a se preocupar. Dividir em camadas permite modularizar a implementação da rede, de modo que cada camada tenha uma tarefa na estrutura de comunicação dos aspectos físicos ao software. Como a camada de cima não precisa saber sobre os detalhes e especificações da camada de baixo, as mudanças de uma parte do sistema é transparente para o resto do sistema. Existem diversas formas de implementação de camadas, mas todas se baseiam em um modelo de referência, o modelo OSI \cite{Zimmermann:1988:ORM:59309.59310}.
+
+
+\begin{figure}[h!]
+\label{fig:1.2.0/modelo_osi_tcpip}
+\centering
+\includegraphics[width=8cm]{./02_Capitulos/02_Cap1/figures/modelo_osi_tcpip}
+\caption{Diferenças entre OSI e TCP/IP em suas camadas}
+\end{figure}
+
+Baseado no modelo OSI. Temos o modelo TCP/IP \cite{TCPIP}, utilizado na internet e base para protocolos de aplicação muito utilizados como HTTP, WebSocket e MQTT. Em ambos cada camada exerce uma tarefa com seu respectivo protocolo, como resumido na tabela \ref{table:1.2.0}.
+
+\begin{table}[h!]
+\centering
+\caption{As camadas e e suas funções}
+\begin{tabular}{|l|l|}
+\hline
+\multicolumn{1}{|c|}{CAMADA} & \multicolumn{1}{c|}{FUNÇÃO}                                                  \\ \hline
+7 - Aplicação                & Define instruções específicas da aplicação          						    \\ \hline
+6 - Apresentação             & Formatação dos dados, conversão dos dados                     					\\ \hline
+5 - Sessão                   & Negociação e conexão com outros nós, analogia                                \\ \hline
+4 - Transporte               & Oferece métodos para a entrega de end-to-end                        			\\ \hline
+3 - Rede                     & Roteamento de pacotes em uma ou várias redes                                 \\ \hline
+2 - Enlace                   & Detecção de erros;                                                            \\ \hline
+1 - Física                   & Aspectos físicos da transmissão \\ \hline
+\end{tabular}
+\label{table:1.2.0}
+\end{table}
 
 
 
