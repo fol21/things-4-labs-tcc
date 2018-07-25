@@ -17,9 +17,9 @@ controle de versão, estrutura de diretórios e outros quesitos de organização
 
 **Tópicos:**
 	- Introdução sobre IoT; **OK**
-		- Indústria 4.0;
-		- As três fases do IoT;
-		- Camadas de Rede;
+		- Indústria 4.0 e IoT; 
+		- As três fases do IoT; ** OK **
+		- Camadas de Rede;  ** OK **
 	- Ideía Geral, binding IoT - Projeto;
 		- As diferenças de tecnologia;
 		- Interface com usuário;
@@ -27,7 +27,7 @@ controle de versão, estrutura de diretórios e outros quesitos de organização
 		- Facilidade de escolhas de tecnologia;	
 		- Publish/Subscribe;
 	- O Projeto:
-		- MQTT X HTML;
+		- MQTT X HTTP X Websocket;
 		- Protocolos alternativos;
 		- Camada de abstração;
 		- Data Stream;
