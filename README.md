@@ -22,9 +22,9 @@ controle de versão, estrutura de diretórios e outros quesitos de organização
 		- Camadas de Rede;  ** OK **
 	- Ideía Geral, binding IoT - Projeto;
 		- As diferenças de tecnologia;
-		- Interface com usuário;
-		- Escalabilidade, low cost, open source;
-		- Facilidade de escolhas de tecnologia;	
+		- Interface com usuário; ** ok **
+		- Escalabilidade, low cost, open source; ** ok **
+		- Facilidade de escolhas de tecnologia;	** ok **
 		- Publish/Subscribe;
 	- O Projeto:
 		- MQTT X HTTP X Websocket;

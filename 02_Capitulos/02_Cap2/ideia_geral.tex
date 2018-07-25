@@ -7,12 +7,30 @@ No capítulo \ref{chapter:industria_4_0_iot}, foi visto as bases para se impleme
 \section{Algumas tecnologias em IoT}
 \label{section:tecnologias_iot}
 
-Estas são algumas tecnologias que satisfazem as condições apresentadas para um sistema IoT, nem todas utilizam o protocolo TCP/IP, mas todas são  capazes de fazer seus dispositivos comunicarem-se em tempo real levando em consideração seus alcances e escalabilidade
+Estas são algumas tecnologias que satisfazem as condições apresentadas para um sistema IoT, nem todas utilizam o protocolo TCP/IP, mas todas são  capazes de fazer seus dispositivos comunicarem-se em tempo real levando em consideração seus alcances e escalabilidade.
 
 \subsection{RFID}
 \label{subsection:rfid}
 
 
+\subsection{Redes NB}
+\label{subsection:nb}
+
 %% Inserir diferentes tecnologias
 
-A idéia inicial seria
+\subsection{Low Energy Bluetooth}
+\label{subsection:bluetooth}
+
+
+\subsection{TCP/IP}
+\label{subsection:tcpip}
+
+
+\section{A Interface}
+\label{section:interface}
+
+Inicialmente, os conceitos e ideias do projeto eram voltados a desenvolver uma interface no qual um desenvolvedor poderia implementar um sistema IoT de ponta a ponta utilizando APIs que direcionariam para um desses protocolos da sessão \ref{section:tecnologias_iot}, porém as diferenças entre os protocolos e as camadas de base, fazem com que esta solução esteja mais distante. Então o foco voltou-se  para tecnologias que tenham base na pilha TCP/IP, por sua vasta implementação nas redes industriais e residências e na Internet.
+
+Neste projeto iremos ver a implementação desta interface para o protocolo MQTT, cuja escolha será justificada adiante. Serão descritas as interfaces para as três camadas, que são de baixo custo, open-source e altamente escaláveis para construir outras aplicações com esta como base.
+ 
+
