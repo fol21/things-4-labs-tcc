@@ -41,4 +41,24 @@ Inicialmente, os conceitos e ideias do projeto eram voltados a desenvolver uma i
 
 Neste projeto iremos ver a implementação desta interface para o protocolo MQTT, cuja escolha será justificada adiante. Serão descritas as interfaces para as três camadas, que são de baixo custo, open-source e altamente escaláveis para construir outras aplicações com esta como base.
  
+Para abstrair as camadas e aplicação, a interface deve estar dentro dos requisitos do IoT, bem assim como apresentar uma estrutura que se traduza aos protocolos baseados TCP/IP, para isso, algumas características fundamentais podem ser destacadas como base para um sistema IoT descritos.
+
+\begin{itemize}
+
+\item Full-Duplex. Capaz de receber e enviar mensagens ao mesmo tempo;
+\item Multicast. Capaz de enviar mensagens um ou mais dispositivos simultâneos;
+\item Envio de mensagens em tempo real;
+
+\end{itemize}
+
+
+\begin{figure}[h!]
+\label{fig:2.2.0/camada_abatracao}
+\centering
+\includegraphics[width=12cm]{./02_Capitulos/02_Cap2/figures/camada_abstracao}
+\caption{Interface de comunicação. A interface tem seu próprio protocolo que direciona e se comunica a um ou mais protocolos de aplicação}
+\end{figure}
+
+Essas características estão dentro do escopo apresentado no capítulo \ref{chapter:industria_4_0_iot}, a estratégia foi direcionada para protocolos que atendessem esse pré-requisito, assim construindo uma camada de abstração da interface por cima dos protocolos que contemplam essas características como mostra a figure \ref{fig:2.2.0/camada_abatracao}, o que será mais detalhado no próximo capítulo.
+
 

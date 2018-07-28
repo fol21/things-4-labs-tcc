@@ -17,27 +17,27 @@ controle de versão, estrutura de diretórios e outros quesitos de organização
 
 **Tópicos:**
 *  Introdução sobre IoT; **OK**
-	* Indústria 4.0 e IoT; 
+	* Indústria 4.0 e IoT; **ok**
   	* As três fases do IoT; **OK**
 	* Camadas de Rede;  **OK**
-* Ideía Geral, binding IoT - Projeto;
-	* As diferenças de tecnologia;
+* Ideía Geral, binding IoT - Projeto; **ok**
+	* As diferenças de tecnologia;**ok**
+    	* Protocolos alternativos;**ok**
 	* Interface com usuário; **ok**
 	* Escalabilidade, low cost, open source; **ok**
 	* Facilidade de escolhas de tecnologia;	**ok**
-	* Publish/Subscribe;
  * O Projeto:
+    * Camada de abstração;**ok**
+    * Data Stream;**ok**
+    * Publishers & Subscribers**ok**
     * MQTT X HTTP X Websocket;
-    * Protocolos alternativos;
-    * Camada de abstração;
-    * Data Stream;
-    * Publishers & Subscribers
     * Plataformas;
-    * Bancos de Dados para IoT;
+    * Persistência e Bancos de Dados para IoT;
   * Casos de Estudo;
 	* Console;
 	* ESP32;
-
+  * Custos de Imlementação;
+    * Estimativas de gastos
 
 
 **TODOS**
