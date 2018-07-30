@@ -18,10 +18,10 @@ Pode-se definir IoT como a estrutura que comunica dispositivos em rede, permitin
 Semelhante as camadas de rede, as camadas de IoT também exercem funções específicas no transporte de dados, e a camada acima não necessariamente precisa saber como a inferior funciona, somente precisa dos dados que esta camada entrega e executar suas tarefas sobre estes até chegar ao destino especificado, formando uma estrutura de pilha como na figura \ref{fig:1.1.0/camadas_iot};
 
 \begin{figure}[h!]
-\label{fig:1.1.0/camadas_iot}
 \centering
 \includegraphics[width=5cm]{./02_Capitulos/02_Cap1/figures/iot_stack}
 \caption{As três camadas do IoT, dos sensores ao mundo real}
+\label{fig:1.1.0/camadas_iot}
 \end{figure}
 
 A primeira camada é a de aquisição de dados, que lida com o mundo físico e amostra estes dados através de sensores e conversores A/D, também realiza o processamento para entregar em um formato adequado para transmissão e entendível do outro lado, dependo da aplicação. A segunda camada é a camada de transmissão, onde estão, efetivamente, as camadas de rede embutidas. Como o nome já denuncia, ela lida com os aspectos de rede e comunicação para que o dados cheguem as seus destinos. E por último temos a camada de aplicação, a mais abrangente e que envolve maior poder computacional. Ela recebe os dados e lida com os processos de aplicação destes dados, seja análise, visualização, armazenamento ou a estruturação destes.
@@ -78,10 +78,10 @@ Redes de computadores são complexas com diferentes aspectos a se preocupar. Div
 
 
 \begin{figure}[h!]
-\label{fig:1.2.0/modelo_osi_tcpip}
 \centering
 \includegraphics[width=8cm]{./02_Capitulos/02_Cap1/figures/modelo_osi_tcpip}
 \caption{Diferenças entre OSI e TCP/IP em suas camadas}
+\label{fig:1.2.0/modelo_osi_tcpip}
 \end{figure}
 
 Baseado no modelo OSI. Temos o modelo TCP/IP \cite{TCPIP}, visualizado em \ref{fig:1.2.0/modelo_osi_tcpip} e utilizado na internet e base para protocolos de aplicação muito utilizados como HTTP, WebSocket e MQTT. Em ambos cada camada exerce uma tarefa com seu respectivo protocolo, como resumido na tabela \ref{table:1.2.0}.
