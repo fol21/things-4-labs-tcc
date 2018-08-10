@@ -19,7 +19,7 @@ Para isso é necessário acionadores para a sala e cozinha, mais os quartos, tot
 \label{fig:5.1.0/planta-casa}
 \end{figure}
 
-Com menos de R\$ 2000,00 pode-se instalar um sistema robusto para automatizar uma casa. O projeto já conta que a residência possui uma rede WiFi e se a casa tiver um PC, pode-se abater do custo do servidor.
+Nota-se pela \ref{table:planta-casa}, com menos de R\$ 2000,00 pode-se instalar um sistema robusto para automatizar uma casa. O projeto já conta que a residência possui uma rede WiFi e se a casa tiver um PC, pode-se abater do custo do servidor.
 
 
 \begin{table}[h!]
@@ -41,3 +41,32 @@ Infraestrura        & Caixas de proteção, fios etc & 1    & \$500.00      & \$
 \label{table:planta-casa}
 \end{table}
 
+
+\section{Aplicação: Controle de Iluminação de Postos de combustível}
+\label{section:posto}
+
+
+Essa é uma aplicação que pode ser usado no comércio assim como na indústria. Trata-se de uma central que controla via rede local as iluminações de postos de combustível. Estes possuem uma fonte de luz bastante potente na testeira(Parte de cima do posto) e no Totem (presente na entrada do posto, onde são mostrados os preços dos combustíveis). A infraestrutura do projeto não é complexa, Necessitará de um módulo ESP32 para processamento e envio dos acionamentos, relés de estado sólido, disjuntores de curva C, uma bateria que converte CA em CC, geralmente baterias similares as de celulares satisfazem, isso para o interfaciamento entre a rede elétrica e o sistema digital de controle. Por fim tudo isso ficará presente em uma caixa com vedação perto da caixa de energia do posto.
+
+Para montar a rede Wifi local, será utilizado um roteador dedicado, configurando uma rede local, não é necessário a conexão a internet neste ponto do projeto. O ESP32 irá se conectar a rede por wps \cite{linksys}, O broker irá ser instalado em um desktop na parte administrativa do posto. O diferencial da aplicação está na aplicação. O frentista responsável poderá acessar a rede e um servidor HTTP irá fornecer uma página web no qual ele pode enviar comandos de acionamento das luzes e até agendar o acionamento destas para um horário específico.
+
+
+\begin{table}[h]
+\caption{Infraestrura para sistema de controle de iluminação de  postos de Combustíveis}
+\begin{tabular}{|l|l|l|l|l|}
+\hline
+Item           & Descrição                   & Qtde & Unidade (R\$) & Total (R\$) \\ \hline
+esp32          & Módulo de aquisição         & 1    & \$30.00       & \$30.00     \\ \hline
+Disjuntor      & Curva C                     & 4    & \$40.00       & \$160.00    \\ \hline
+P8             & Módulo sensor de tensão     & 6    & \$20.00       & \$120.00    \\ \hline
+Acs712 - 5a    & Módulo sensor de corrente   & 6    & \$15.00       & \$90.00     \\ \hline
+Ssr-25         & Relé Estado Sólido          & 4    & \$30.00       & \$120.00    \\ \hline
+Desktop        & Servidor Local              & 1    & \$600.00      & \$600.00    \\ \hline
+TP-Link AC1350 & Roteador Wireless           & 1    & \$280.00      & \$280.00    \\ \hline
+Infraestrura   & Caixa de proteção, fios etc & 1    & \$700.00      & \$700.00    \\ \hline
+\multicolumn{4}{|l|}{TOTAL}                                         & \$2,100.00  \\ \hline
+\end{tabular}
+\label{table:posto}
+\end{table}		
+
+Na \ref{table:posto}, como temos um sistema trifásico é necessário mais acionadores, como  as ferramentas utilizadas para o projeto da aplicação são de escopo aberto e gratuitas, não possuímos despesas neste aspecto. Deve-se planejar um local para que a caixa de controle consiga captar um sinal estável do roteador, e é recomendável configura-lo para enviar dados em um canal menos congestionado. O sensores de tensão e corrente foram adicionados caso seja adicionado ao projeto um monitoramento de consumo de energia.
