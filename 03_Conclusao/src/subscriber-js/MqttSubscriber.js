@@ -32,8 +32,9 @@ class MqttSubscriber {
         this.messageCallback = null;
 
         this.topic = null;
-        if (program.topic || program.configure) {
+        if (program.topic || config.topic || program.configure) {
             if (program.topic) this.topic = program.topic;
+            else if(config.topic) this.topic = config.topic;
             if (program.configure) this.configure = program.configure;
         } else {
             console.log("Topic or Configuration is required (run program with -t <topic> or -C <configuration> flag)")
@@ -99,7 +100,13 @@ class MqttSubscriber {
 
 
 
-
+    /**
+     * 
+     * Starts the transaction of the Data Stream defining the configurations
+     * 
+     * @param {*} reconnect 
+     * @param {*} callback 
+     */
     _connectionStarter(reconnect,callback)
     {
         return () => {
@@ -108,8 +115,9 @@ class MqttSubscriber {
 
                 if(reconnect) conf = this.configure; 
                 else conf = this._parseConfigure()
-                if (conf.topic.match(/(\w+)\/stream:(\w+)/g)) {
-                    this.client.publish(conf.topic, conf.json)
+                if (conf.topic.match(/(\w+)\/configure\/stream:(\w+)/g)) 
+                {
+                    this.client.publish(conf.topic, conf.json);
                     console.log(`Sent Configuration ${conf.json} to ${conf.topic}`)
                 }
             }
