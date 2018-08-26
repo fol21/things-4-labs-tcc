@@ -20,13 +20,29 @@ Para isso precisaremos utilizar um Publisher no console a ter informações de t
 \end{figure}
 
 % Falar sobre o diagrama de fluxo
-A \ref{fig:4.1.0/fluxo_controle_temp} mostra todo o fluxo das duas aplicações, o Publisher publica em no tópico \textit{/001/stream:periodic}, a informação coletada a cada T1=3 segundos e espera T2=1 antes de enviar. O Subscriber escuta este tópico e persiste ao chegar uma mensagem de dados pelo Data Stream, ao atingir 100 amostras, um gráfico de Temperatura da CPU principal pela Data-Hora de inserção é gerado com as últimas 100 inserções no banco.
+A \ref{fig:4.1.0/fluxo_controle_temp} mostra todo o fluxo das duas aplicações, o Publisher publica em no tópico \textit{/001/stream:periodic}, a informação coletada a cada T1=3 segundos e espera T2=1 antes de enviar. O Subscriber escuta este tópico e persiste ao chegar uma mensagem de dados pelo Data Stream, ao atingir N=100 amostras, um gráfico de Temperatura da CPU principal pela Data-Hora de inserção é gerado com as últimas 100 inserções no banco.
 
 
 % Inserção no banco
+Repare que a medição depende da data e da hora de inserção no banco, o tempo de chegada até a persistência varia muito com a latência e com o processamento da aplicação, desta forma temos uma medida mais constante. A \ref{fig:4.1.0/comapass} mostra o formato de dado armazenado, com a ferramenta Compass para visualização de dados do MongoDB. Repare que lidamos com a estrutura de dados em documento porém obrigatoriamente todo documento da Interface possui o timestamp da inserção no banco, o campo data é o objeto de dados em medição.
 
+\begin{figure}[h!]
+\centering
+\includegraphics[width=15cm]{./02_Capitulos/02_Cap4/figures/compass}
+\caption{Visualização dos dados armazenados em documento em uma coleção do MongoDB}
+\label{fig:4.1.0/comapass}
+\end{figure}
 
 % Visualização com o plotly
+A visualização de dados é feita pela ferramenta Plotly, um serviço que fornece uma interface para criar, editar e analisar gráficos, basta criar uma conta, gratuíta ou paga, e o usuário poderá criar gráficos na plataforma web ou através de APIs implementadas em múltiplas linguagens de programação conhecidas. A aplicação do Subscriber utiliza da segunda opção com o módulo plotly.js, a implementação em Javascript da plataforma. A cada N=100 amostras são produzidos gráficos como o da  \ref{fig:4.1.0/cpu-temp_1}.
 
 
+\begin{figure}[h!]
+\centering
+\includegraphics[width=16cm]{./02_Capitulos/02_Cap4/figures/cpu-temp_1}
+\caption{Comportamento da temperatura em três momentos}
+\label{fig:4.1.0/cpu-temp_1}
+\end{figure}
+
+A \ref{fig:4.1.0/cpu-temp_1} mostra a variação da temperatura de uma CPU da Intel Core I7 em três momentos. O gráfico começa no primero momento onde só os processos básicos do computador estão em execução, mantendo a temperatura constante, logo em seguida entra o momento onde o computador está hibernando o que leva a uma pequena baixa na temperatura. O terceiro momento descreve o comportamento quando o computador executa o MATLAB em um script que exige capacidade de processamento, causando uma leve alta de temperatura, mas não tão lata devido a capacidade do processador e depois estabilizando e voltando ao primeiro momento. Com isso fechando o ciclo das aplicações.
 
