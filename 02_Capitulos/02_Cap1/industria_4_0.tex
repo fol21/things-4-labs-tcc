@@ -12,16 +12,42 @@ Dentre o meio da Indústria 4.0, encontra-se a internet das coisas ou IoT, respo
 
 Pode-se definir IoT como a estrutura que comunica dispositivos em rede, permitindo a transmissão de dados sobre estes em tempo real. É a ponte que permite a troca de informações sobre um dispositivo, qual seu status, seu desempenho, suas condições físicas e do ambiente ao seu redor. Mas, para que este ciclo esteja completo é necessário camadas que desempenham tarefas específicas, para que o dado chegue a quem ou a o que está esperando.
 
+\section{Visão geral de uma aplicação IoT}
+\label{section:overview}
+
+Observe  a \ref{fig:1.1.0/iot_app}, temos uma rede de N sensores que enviam dados telemétricos e N atuadores que recebem ordens para executar uma função, ambos estão em rede e podem receber e enviar informação em tempo real. O servidor, que pode ser um Broker como será descrito mais tarde neste trabalho, encaminha os dados (ou mensagens) para as aplicações do banco de dados, que é utilizado para Análise destes e recebe informações do controlador, que por sua vez envia mensagens de decisões baseada na análise de dados de alguma forma estas são transmitidas para os atuadores.
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=10cm]{./02_Capitulos/02_Cap1/figures/iot_app}
+\caption{Um exemplo de aplicação IoT que percorre os problemas a solucionar}
+\label{fig:1.1.0/iot_app}
+\end{figure}
+
+Porém o sensor 1 está localizado em um determinado cenário com usas próprias características físicas e de rede, assim como outros estão em outro cenário. Supondo que o primeiro seja uma rede com poucos sensores e o segundo cenário seja uma rede com um grande fluxo de dados, sujeito a congestionamento. Seria uma grande ajuda que o  sistema se ajustasse a estas mudanças de cenário.
+
+Este trabalho visa implementar um sistema que utiliza o protocolo de aplicação MQTT\ref{subsection:mqtt}, para transmissão de dados em tempo real entre dispositivos, oferecendo suporte a plataformas embarcadas e para consoles com sistemas operacionais (Linux, Windows). O sistema contempla também persistência de dados utilizando banco de dados MongoDB \ref{subsection:bancos_IoT}, com o diferencial de se adaptar a cenários através de canais de dados chamados Data Streams, oferecendo diferentes configurações que podem otimizar o envio de dados em cada cenário.
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=10cm]{./02_Capitulos/02_Cap1/figures/iot_app-layers}
+\caption{Como a camada IoT se encaixa na aplicação}
+\label{fig:1.1.0/iot_app-layers}
+\end{figure}
+
+
+O sistema percorre toda a camada de IoT como na \ref{fig:1.1.0/iot_app-layers}, da aquisição de dados a persistência destes, para entender melhor esta camada, iremos descrever o projeto e implementação em cada passo do sistema.
+
 \section{As Camadas do IoT}
 \label{section:camadas_iot}
 
-Semelhante as camadas de rede, as camadas de IoT também exercem funções específicas no transporte de dados, e a camada acima não necessariamente precisa saber como a inferior funciona, somente precisa dos dados que esta camada entrega e executar suas tarefas sobre estes até chegar ao destino especificado, formando uma estrutura de pilha como na figura \ref{fig:1.1.0/camadas_iot};
+Semelhante a camada de rede, a camada de IoT também exerce funções específicas no transporte de dados, e a camada acima não necessariamente precisa saber como a inferior funciona, somente precisa dos dados que esta camada entrega e executar suas tarefas sobre estes até chegar ao destino especificado, formando uma estrutura de pilha como na figura \ref{fig:1.1.0/camadas_iot};
 
 \begin{figure}[h!]
 \centering
 \includegraphics[width=5cm]{./02_Capitulos/02_Cap1/figures/iot_stack}
 \caption{As três camadas do IoT, dos sensores ao mundo real}
-\label{fig:1.1.0/camadas_iot}
+\label{fig:1.2.0/camadas_iot}
 \end{figure}
 
 A primeira camada é a de aquisição de dados, que lida com o mundo físico e amostra estes dados através de sensores e conversores A/D, também realiza o processamento para entregar em um formato adequado para transmissão e entendível do outro lado, dependo da aplicação. A segunda camada é a camada de transmissão, onde estão, efetivamente, as camadas de rede embutidas. Como o nome já denuncia, ela lida com os aspectos de rede e comunicação para que o dados cheguem as seus destinos. E por último temos a camada de aplicação, a mais abrangente e que envolve maior poder computacional. Ela recebe os dados e lida com os processos de aplicação destes dados, seja análise, visualização, armazenamento ou a estruturação destes.

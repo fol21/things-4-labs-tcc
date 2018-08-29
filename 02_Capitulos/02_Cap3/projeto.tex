@@ -11,37 +11,6 @@ Devido a interação entre dispositivos de aquisição de dados e aplicação e 
 
 O protocolo consiste em uma abstração de um canal de envio de dados chamado Data Stream mostrado em \ref{fig:3.1.0/data_stream}, no qual passam dados após realizar um processamento dos dados em uma determinada velocidade podendo conter um limite de pacote de dados. Nas pontas desse canal estão os Publishers e Subscribers, que serão descritos adiante. Este conceito é uma forma de abstrair, unificar e simplificar a forma de transporte de dados, de uma modo que a interface possa ter o controle sobre os aspectos de transmissão. Cada protocolo na camada de aplicação, implementa este conceito de uma certa forma, porém o desenvolvedor não precisará se preocupar com estes detalhes.
 
-\begin{figure}[h!]
-\centering
-\includegraphics[width=13cm]{./02_Capitulos/02_Cap3/figures/data_stream}
-\caption{O conceito de Data Stream para a abstração do transporte de dados}
-\label{fig:3.1.0/data_stream}
-\end{figure}
-
-Para criar um Data Stream, basta um Subscriber estar ouvindo um tópico no formato abaixo. E um Publisher publicar neste tópico. O ID corresponde a uma identificação única que pode ser definida pelo desenvolvedor. O \textit{stream\_nome} corresponde ao tipo de Data Stream utilizado.
-
-$$ /\{data\_stream\_id\}/stream:\{stream\_nome\} $$
-
-Quando um Data Stream é criado, um conjunto de configurações determina como o dado será enviado, essas configurações estão contidas nos publishers dependendo da lista de Data Streams que este possui. Os Subscribers podem alterar estas configurações, baseada nas necessidades da aplicação, como problemas de processamento ou congestionamento etc.
-
-\begin{figure}[h!]
-\centering
-\includegraphics[width=13cm]{./02_Capitulos/02_Cap3/figures/data_stream_creation}
-\caption{Um Data Stream é criado a partir do tópico \textit{/003/stream:periodic}}
-\label{fig:3.1.0/data_stream_creation}
-\end{figure}
-
-Para um Subscriber enviar as alterações nas configurações basta publicar no tópico abaixo quase idêntico ao anterior. As configurações são feitas por uma string JSON \cite{json}, um conjunto de chaves-valor universalmente interpretada por várias linguagens de programação como forma de transporte de objetos de uma classe.
-
-$$ /\{data\_stream\_id\}/configure/stream:\{stream\_nome\} $$
-
-Existem dois tipos de Data Stream já implementados em qualquer publisher. Porém o desenvolvedor pode implementar seus próprios Data Stream dependendo da linguagem de programação utilizada:
-
-\begin{itemize}
-\item Contínuo: Data Stream padrão sem configurações definidas que publica continuamente dados;
-\item Periódico: Publica dados esperando um período T antes de publicar, este período pode ser alterado;
-\item Customizaveis: Criados pelo desenvolvedor, com suas próprias configurações.
-\end{itemize}
 
 \section{Publishers e Subscribers}
 \label{section:publishers_subscribers}
@@ -62,6 +31,49 @@ Qualquer mensagem publicada em um tópico é imediatamente recebida por todos os
 
 Publishers são dispositivos que criam Data Stream  e enviam dados por estes, regulam o processamento dos dados estipulam limites de tamanho de cada pacote de dado e determinam o intervalo de envio de pacotes. O protocolo permite que estes enviem os dados e também permite que outros dispositivos possam passar configurações remotamente para modificar os parâmetros de cada Data Stream, como o intervalo de envio ou outra configuração criada pelo tipo de Data Stream implementado. 
 
+Porém este padrão define as configurações gerais do sistema, não contempla as mudanças de cenário possíveis. É necessária a adição de configurações dinâmicas que se adaptem as condições impostas pelos cenários, uma interface que varia com as condições de cada par Publisher/Subscriber formado. Para isso foi criado o conceito Data Stream.
+
+
+\section{Data Streams}
+\label{section:data_stream}
+
+Um Data Stream é uma interface que permite adicionar configurações de como o dado será enviado pelo Publisher, permitindo que este lide com os problemas causados pelo cenário, como congestionamentos, limitando o tamanho de mensagens, conversões de dados ou problemas de processamento. As configurações podem ser enviadas pelo Subscriber, permitindo um dinamismo caso acontece mudanças de cenários em algum Publisher. A configuração pode lidar com qualquer aspecto do envio de dados, como o tamanho das mensagens enviadas, ou a taxa de envio ou no próprio formato de mensagem enviado.
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=13cm]{./02_Capitulos/02_Cap3/figures/data_stream}
+\caption{O conceito de Data Stream para a abstração do transporte de dados}
+\label{fig:3.1.0/data_stream}
+\end{figure}
+
+Para criar um Data Stream, basta um Subscriber estar ouvindo um tópico no formato abaixo. E um Publisher publicar neste tópico. O ID corresponde a uma identificação única que pode ser definida pelo desenvolvedor. O \textit{stream\_nome} corresponde ao tipo de Data Stream utilizado.
+
+$$ /\{data\_stream\_id\}/stream:\{stream\_nome\} $$
+
+Quando um Data Stream é criado, um conjunto de configurações determina como o dado será enviado, essas configurações estão contidas nos publishers dependendo da lista de Data Streams que este possui. Os Subscribers podem alterar estas configurações, baseada nas necessidades da aplicação, como problemas de processamento ou congestionamento etc.
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=13cm]{./02_Capitulos/02_Cap3/figures/data_stream_creation}
+\caption{Um Data Stream é criado a partir do tópico \textit{/003/stream:periodic}}
+\label{fig:3.1.0/data_stream_creation}
+\end{figure}
+
+
+Para um Subscriber enviar as alterações nas configurações basta publicar no tópico abaixo quase idêntico ao anterior. As configurações são feitas por uma string JSON \cite{json}, um conjunto de chaves-valor universalmente interpretada por várias linguagens de programação como forma de transporte de objetos de uma classe.
+
+$$ /\{data\_stream\_id\}/configure/stream:\{stream\_nome\} $$
+
+Existem dois tipos de Data Stream já implementados em qualquer publisher. Porém o desenvolvedor pode implementar seus próprios Data Stream dependendo da linguagem de programação utilizada:
+
+\begin{itemize}
+\item Contínuo: Data Stream padrão sem configurações definidas que publica continuamente dados;
+\item Periódico: Publica dados esperando um período T antes de publicar, este período pode ser alterado;
+\item Customizaveis: Criados pelo desenvolvedor, com suas próprias configurações.
+\end{itemize}
+
+
+
 
 \begin{figure}[h!]
 \centering
@@ -72,6 +84,7 @@ Publishers são dispositivos que criam Data Stream  e enviam dados por estes, re
 
 Subscribers estão na outra ponta recebendo os dados, são capazes de enviar as configurações do Data Stream para os Publishers a chegada destes dados como um driver para a aplicação
 Essas funcionalidades foram implementadas Orientadas a Objeto e são escaláveis para aplicações mais complexas que serão implementadas para o uso dos sistemas em aplicações de sensoriamento e visualização dos dados.
+
 
 \section{A implementação}
 \label{section:implementacao}
@@ -113,13 +126,7 @@ Na figura \ref{fig:3.2.0/broker_pub_sub}, o Broker armazena os tópicos e os ids
 %% Tipos de MQTT 
 Com a evolução e o uso do protocolo, foram necessárias atualizações que contemplam funcionalidades que atendem  requisitos essenciais para aplicações da indústria. Como atender dispositivos que não usam a pilha TCP/IP e medidas de segurança (que serão melhor debatidas á frente). 
 
-\subsubsection{MQTT-SN}
-\label{subsubsection:mqtt-v}
-
 Existe uma gama de dispositivos que utilizam protocolos específicos, geralmente leves, para redes locais e leves para o transporte de dado, a exemplo do ZigBee \cite{zigbee}. Para isso foi criada uma versão do MQTT para atender estes tipos de protocolos, substituindo a base TCP/IP por outros protocolos destas camadas, mantendo a camada de aplicação e o padrão Publish/Subscribe.
-
-\subsubsection{MQTTS}
-\label{subsubsection:mqtts}
 
 Para resolver questões de segurança, foi criada uma variação do MQTT que adiciona camadas deste quesito ao protocolo de aplicação. Assim como o HTTPS o protocolo MQTTS é construído em cima do protocolo SSL/TLS (explicado em \ref{subsection:seguranca}), camada de segurança que também usa como base TCP/IP. Esta camada envolve o processo de encriptação dos cabeçalhos da aplicação e autenticação por passagem de certificados. 
 

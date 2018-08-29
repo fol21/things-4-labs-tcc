@@ -46,3 +46,74 @@ A visualização de dados é feita pela ferramenta Plotly, um serviço que forne
 
 A \ref{fig:4.1.0/cpu-temp_1} mostra a variação da temperatura de uma CPU da Intel Core I7 em três momentos. O gráfico começa no primero momento onde só os processos básicos do computador estão em execução, mantendo a temperatura constante, logo em seguida entra o momento onde o computador está hibernando o que leva a uma pequena baixa na temperatura. O terceiro momento descreve o comportamento quando o computador executa o MATLAB em um script que exige capacidade de processamento, causando uma leve alta de temperatura, mas não tão lata devido a capacidade do processador e depois estabilizando e voltando ao primeiro momento. Com isso fechando o ciclo das aplicações.
 
+
+
+\section{Aplicação: Automação Residencial}
+\label{section:residencial}
+
+Para validar o baixo custo do sistema, as próximas seções tem o foco em simular o orçamento de dois projetos. Um feito para a indústria e outro em redes domésticas para automações residenciais. Serão propostos cenários de aplicações reais, capazes de confirmar a premissa do projeto.
+Como vimos no capítulo de projetos, o sistema pode ser instalado em plataformas mais sofisticadas, contendo sistemas operacionais e hardware dedicado. Mas nestes cenários utilizaremos o hardware mínimo que é compatível com o sistema e atua satisfatoriamente na aplicação.
+
+
+O caso em estudo é a automação parcial de uma residência. Como pode ser visto em  \ref{fig:5.1.0/planta-casa}, a casa possui dois quartos, sala de estar, dois banheiros, cozinha, área de serviço e varanda. O objetivo é monitorar a temperatura local, o consumo de energia, detectar aberturas de portas e janelas de entrada da residência para fins de segurança e acionamento de luzes.
+
+Para isso é necessário acionadores para a sala e cozinha, mais os quartos, totalizando cerca de 4 pontos de luz para acionar, o mesmo vale para os sensores de temperatura, no qual farão a média de temperatura da casa. Para controle de consumo de energia, nos limitaremos as tomadas de eletrodomésticos e eletrônicos, que representam a maior parte do consumo, para um ponto na sala, nos quartos, na tomada da geladeira, micro-ondas e lavadora, cerca de 6 tomadas a colocar sensores de tensão e corrente AC para cálculo da potência. Serão colocados sensores magnéticos para detectar abertura de portas e janelas, na porta de entrada, na porta da varanda, nas janelas do quarto e na área de serviço.
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=13cm]{./02_Capitulos/02_Cap5/figures/planta-casa}
+\caption{Planta baixa de residência de dois quartos, retirado de \cite{decorandocasas}}
+\label{fig:5.1.0/planta-casa}
+\end{figure}
+
+Nota-se pela \ref{table:planta-casa}, com menos de R\$ 2000,00 pode-se instalar um sistema robusto para automatizar uma casa. O projeto já conta que a residência possui uma rede WiFi e se a casa tiver um PC, pode-se abater do custo do servidor.
+
+
+\begin{table}[h!]
+\centering
+\caption{Orçamento de um sistema simples para automação da residência da \ref{fig:5.1.0/planta-casa}}
+\begin{tabular}{|l|l|l|l|l|}
+\hline
+Item                & Descrição                    & Qtde & Unidade (R\$) & Total (R\$) \\ \hline
+esp32               & Módulo de aquisição          & 4    & \$30.00       & \$120.00    \\ \hline
+DHT11               & Sensor de temperatura        & 4    & \$10.00       & \$40.00     \\ \hline
+P8                  & Módulo sensor de tensão      & 6    & \$20.00       & \$120.00    \\ \hline
+Acs712 - 5a         & Módulo sensor de corrente    & 6    & \$15.00       & \$90.00     \\ \hline
+Ssr-25              & Relé Estado Sólido           & 4    & \$30.00       & \$120.00    \\ \hline
+Desktop             & Servidor Local               & 1    & \$600.00      & \$600.00    \\ \hline
+Sensores Magnéticos & Sensores de abertura         & 6    & \$40.00       & \$240.00    \\ \hline
+Infraestrura        & Caixas de proteção, fios etc & 1    & \$500.00      & \$500.00    \\ \hline
+\multicolumn{4}{|l|}{TOTAL:}                                              & \$1,830.00  \\ \hline
+\end{tabular}
+\label{table:planta-casa}
+\end{table}
+
+
+\section{Aplicação: Controle de Iluminação de Postos de combustível}
+\label{section:posto}
+
+
+Essa é uma aplicação que pode ser usado no comércio assim como na indústria. Trata-se de uma central que controla via rede local as iluminações de postos de combustível. Estes possuem uma fonte de luz bastante potente na testeira(Parte de cima do posto) e no Totem (presente na entrada do posto, onde são mostrados os preços dos combustíveis). A infraestrutura do projeto não é complexa, Necessitará de um módulo ESP32 para processamento e envio dos acionamentos, relés de estado sólido, disjuntores de curva C, uma bateria que converte CA em CC, geralmente baterias similares as de celulares satisfazem, isso para o interfaciamento entre a rede elétrica e o sistema digital de controle. Por fim tudo isso ficará presente em uma caixa com vedação perto da caixa de energia do posto.
+
+Para montar a rede Wifi local, será utilizado um roteador dedicado, configurando uma rede local, não é necessário a conexão a internet neste ponto do projeto. O ESP32 irá se conectar a rede por wps \cite{linksys}, O broker irá ser instalado em um desktop na parte administrativa do posto. O diferencial da aplicação está na aplicação. O frentista responsável poderá acessar a rede e um servidor HTTP irá fornecer uma página web no qual ele pode enviar comandos de acionamento das luzes e até agendar o acionamento destas para um horário específico.
+
+
+\begin{table}[h]
+\caption{Infraestrura para sistema de controle de iluminação de  postos de Combustíveis}
+\begin{tabular}{|l|l|l|l|l|}
+\hline
+Item           & Descrição                   & Qtde & Unidade (R\$) & Total (R\$) \\ \hline
+esp32          & Módulo de aquisição         & 1    & \$30.00       & \$30.00     \\ \hline
+Disjuntor      & Curva C                     & 4    & \$40.00       & \$160.00    \\ \hline
+P8             & Módulo sensor de tensão     & 6    & \$20.00       & \$120.00    \\ \hline
+Acs712 - 5a    & Módulo sensor de corrente   & 6    & \$15.00       & \$90.00     \\ \hline
+Ssr-25         & Relé Estado Sólido          & 4    & \$30.00       & \$120.00    \\ \hline
+Desktop        & Servidor Local              & 1    & \$600.00      & \$600.00    \\ \hline
+TP-Link AC1350 & Roteador Wireless           & 1    & \$280.00      & \$280.00    \\ \hline
+Infraestrura   & Caixa de proteção, fios etc & 1    & \$700.00      & \$700.00    \\ \hline
+\multicolumn{4}{|l|}{TOTAL}                                         & \$2,100.00  \\ \hline
+\end{tabular}
+\label{table:posto}
+\end{table}		
+
+Na \ref{table:posto}, como temos um sistema trifásico é necessário mais acionadores, como  as ferramentas utilizadas para o projeto da aplicação são de escopo aberto e gratuitas, não possuímos despesas neste aspecto. Deve-se planejar um local para que a caixa de controle consiga captar um sinal estável do roteador, e é recomendável configura-lo para enviar dados em um canal menos congestionado. O sensores de tensão e corrente foram adicionados caso seja adicionado ao projeto um monitoramento de consumo de energia.
