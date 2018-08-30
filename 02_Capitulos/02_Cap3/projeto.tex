@@ -34,7 +34,92 @@ Publishers são dispositivos que criam Data Stream  e enviam dados por estes, re
 Porém este padrão define as configurações gerais do sistema, não contempla as mudanças de cenário possíveis. É necessária a adição de configurações dinâmicas que se adaptem as condições impostas pelos cenários, uma interface que varia com as condições de cada par Publisher/Subscriber formado. Para isso foi criado o conceito Data Stream.
 
 
-\section{Data Streams}
+\section{A implementação}
+\label{section:implementacao}
+
+
+%%% MQTT , Websocket e HTTP %%%
+Existem protocolos de aplicação que podem ser facilmente mapeados por esse tipo de interface. Alguns já são cosntruídos no modelo Publish/Subscribe, outros em modelos parecidos. Para critérios de comparação, apresentam-se dois protocolos de aplicação, MQTT e WebSockets \cite{websocket}. O protocolo MQTT, no qual será implementado nesse projeto, foi moldado no padrão citado, enquanto o WebSockets é orientado a eventos. Ambos enviam mensagens em tempo real através de um servidor que controla o fluxo de mensagens da aplicação.
+
+\subsection{MQTT X HTTP}
+\label{subsection:mqttxhttp}
+
+Na questão de desempenho, estes protocolos se mostram mais eficientes dentre os construídos sobre TCP/IP, comparado, por exemplo, com o HTTP, protocolo de rede mais recorrente em redes locais e na internet. Como mostrado em \cite{Tetsuya-Sasaki} e \cite{Naik}, HTTP, por sua natureza de abrir e fechar conexão a cada requisição de dados e seu cabeçalho ilustrado na \ref{fig:3.2.0/http-flow}, requer mais banda e consome mais energia que protocolos leves e de conexão persistente como o MQTT. O que faz sua escolha remota para a aplicação deste projeto.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=8cm]{./02_Capitulos/02_Cap3/figures/http-flow}
+\caption{Fluxo de conexão do HTTP}
+\label{fig:3.2.0/http-flow}
+\end{figure}
+
+Já o MQTT é um protocolo de cabeçalhos menores, conexão persistente e menos passos para o envio de mensagem, como visto na \ref{fig:3.2.0/mqtt-flow}, por ser um protocolo feito com o objetivo de reduzir a latência, levando vantagem para a transmissão contínua de dados, em relação ao HTTP.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=8cm]{./02_Capitulos/02_Cap3/figures/mqtt-flow}
+\caption{Fluxo da conexão do MQTT}
+\label{fig:3.2.0/mqtt-flow}
+\end{figure}
+
+Abaixo na \ref{tabela:mqttxhttp} encontra-se o resumo comparativo entre os protocolos MQTT e HTTP:
+
+\begin{table}[h!]
+\caption{Comparativo MQTT X HTTP}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{|l|l|l|}
+\hline
+\textbf{Característica-Protocolo}     & \textbf{MQTT}                           & \textbf{HTTP}         \\ \hline
+\textbf{Arquitetura}                  & Publish/Subscribe                       & Request/Response      \\ \hline
+\textbf{Complexidade}                 & simples                                 & complexa              \\ \hline
+\textbf{Segurança}                    & TSL/SSL                                 & TSL/SSL               \\ \hline
+\textbf{Camada de Transporte}         & TCP                                     & TCP ou UDP            \\ \hline
+\textbf{Tamanho/Formato de Mensagens} & curtas, binário com cabeçalho de 2Bytes & Grande, Formato ASCII \\ \hline
+\textbf{Porta Padrão}                 & 1883                                    & 80 ou 8080            \\ \hline
+\textbf{Distribuição de dados}        & 1 um para 0/1/N                         & um para um            \\ \hline
+\end{tabular}%
+}
+\label{tabela:mqttxhttp}
+\end{table}
+
+
+
+\subsection{MQTT}
+\label{subsection:mqtt}
+
+O protocolo MQTT \cite{mqtt} foi utilizado escolhido por ser leve e ideal para aplicações em tempo real com vários dispositivos simultaneamente. É um protocolo no padrão Publish/Subscribe  ideal para definir a função de cada dispositivo seja enviando dados (Publish) ou recebendo estes (Subscribe).
+
+Para gerenciar os clients (responsáveis pela implementação da comunicação MQTT) em cada dispositivo é necessário um servidor chamado Broker. Este foi implementado com o Mosquitto \cite{mosquitto}, um broker open source e leve capaz de ser instalado localmente e no servidor do laboratório para testes remotos.
+
+\subsubsection{Broker}
+\label{subsubsection:broker}
+
+O Broker é o servidor do padrão Publish/Subscribe, ele efetivamente executa as ordens de publicação (publish) feita por algum cliente para os tópicos que outros clientes estão inscritos (subscribed), possui todas as listas de tópicos, é orientado a conexão e não persiste informações dos clientes, ou seja, em caso de queda de conexão, estes devem se inscrever novamente nos tópicos.
+
+\textit{Nota: A arquitetura Broker não é exclusividade do MQTT, outros protocolos utilizam esse tipo de implementação em servidores.}
+
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=12cm]{./02_Capitulos/02_Cap3/figures/broker_pub_sub}
+\caption{Exemplo de gerênciamento de um broker}
+\label{fig:3.2.0/broker_pub_sub}
+\end{figure}
+
+Na figura \ref{fig:3.2.0/broker_pub_sub}, o Broker armazena os tópicos e os ids de conexão dos clientes, 2 estava inscrito para ouvir as mensagens do tópico \textit{topic}, enquanto 3 enviava uma ordem de inscrição em \textit{another\_topic}, 1 envia ordem de publicação para \textit{topic}.
+
+
+\subsection{Tipos de MQTT}
+\label{subsection:tipos_mqtt}
+
+%% Tipos de MQTT 
+Com a evolução e o uso do protocolo, foram necessárias atualizações que contemplam funcionalidades que atendem  requisitos essenciais para aplicações da indústria. Como atender dispositivos que não usam a pilha TCP/IP e medidas de segurança (que serão melhor debatidas á frente). 
+
+Existe uma gama de dispositivos que utilizam protocolos específicos, geralmente leves, para redes locais e leves para o transporte de dado, a exemplo do ZigBee \cite{zigbee}. Para isso foi criada uma versão do MQTT para atender estes tipos de protocolos, substituindo a base TCP/IP por outros protocolos destas camadas, mantendo a camada de aplicação e o padrão Publish/Subscribe.
+
+Para resolver questões de segurança, foi criada uma variação do MQTT que adiciona camadas deste quesito ao protocolo de aplicação. Assim como o HTTPS o protocolo MQTTS é construído em cima do protocolo SSL/TLS (explicado em \ref{subsection:seguranca}), camada de segurança que também usa como base TCP/IP. Esta camada envolve o processo de encriptação dos cabeçalhos da aplicação e autenticação por passagem de certificados.
+
+\subsection{Data Streams}
 \label{section:data_stream}
 
 Um Data Stream é uma interface que permite adicionar configurações de como o dado será enviado pelo Publisher, permitindo que este lide com os problemas causados pelo cenário, como congestionamentos, limitando o tamanho de mensagens, conversões de dados ou problemas de processamento. As configurações podem ser enviadas pelo Subscriber, permitindo um dinamismo caso acontece mudanças de cenários em algum Publisher. A configuração pode lidar com qualquer aspecto do envio de dados, como o tamanho das mensagens enviadas, ou a taxa de envio ou no próprio formato de mensagem enviado.
@@ -85,69 +170,6 @@ Existem dois tipos de Data Stream já implementados em qualquer publisher. Poré
 Subscribers estão na outra ponta recebendo os dados, são capazes de enviar as configurações do Data Stream para os Publishers a chegada destes dados como um driver para a aplicação
 Essas funcionalidades foram implementadas Orientadas a Objeto e são escaláveis para aplicações mais complexas que serão implementadas para o uso dos sistemas em aplicações de sensoriamento e visualização dos dados.
 
-
-\section{A implementação}
-\label{section:implementacao}
-
-%%% MQTT , Websocket e HTTP %%%
-Existem protocolos de aplicação que podem ser facilmente mapeados por esse tipo de interface. Alguns já são cosntruídos no modelo Publish/Subscribe, outros em modelos parecidos. Para critérios de comparação, apresentam-se dois protocolos de aplicação, MQTT e WebSockets \cite{websocket}. O protocolo MQTT, no qual será implementado nesse projeto, foi moldado no padrão citado, enquanto o WebSockets é orientado a eventos. Ambos enviam mensagens em tempo real através de um servidor que controla o fluxo de mensagens da aplicação.
-
-Na questão de desempenho, estes protocolos se mostram mais eficientes dentre os construídos sobre TCP/IP, comparado, por exemplo, com o HTTP, protocolo de rede mais recorrente em redes locais e na internet. Como mostrado em \cite{Tetsuya-Sasaki} e \cite{Naik}, HTTP, por sua natureza de abrir e fechar conexão a cada requisição de dados e seu cabeçalho, requer mais banda e consome mais energia que protocolos leves e de conexão persistente como os dois acima. O que faz sua escolha remota para a aplicação deste projeto.
-
-
-\subsection{MQTT}
-\label{subsection:mqtt}
-
-O protocolo MQTT \cite{mqtt} foi utilizado escolhido por ser leve e ideal para aplicações em tempo real com vários dispositivos simultaneamente. É um protocolo no padrão Publish/Subscribe  ideal para definir a função de cada dispositivo seja enviando dados (Publish) ou recebendo estes (Subscribe).
-
-Para gerenciar os clients (responsáveis pela implementação da comunicação MQTT) em cada dispositivo é necessário um servidor chamado Broker. Este foi implementado com o Mosquitto \cite{mosquitto}, um broker open source e leve capaz de ser instalado localmente e no servidor do laboratório para testes remotos.
-
-\subsubsection{Broker}
-\label{subsubsection:broker}
-
-O Broker é o servidor do padrão Publish/Subscribe, ele efetivamente executa as ordens de publicação (publish) feita por algum cliente para os tópicos que outros clientes estão inscritos (subscribed), possui todas as listas de tópicos, é orientado a conexão e não persiste informações dos clientes, ou seja, em caso de queda de conexão, estes devem se inscrever novamente nos tópicos.
-
-\textit{Nota: A arquitetura Broker não é exclusividade do MQTT, outros protocolos utilizam esse tipo de implementação em servidores.}
-
-
-\begin{figure}[h]
-\centering
-\includegraphics[width=12cm]{./02_Capitulos/02_Cap3/figures/broker_pub_sub}
-\caption{Exemplo de gerênciamento de um broker}
-\label{fig:3.2.0/broker_pub_sub}
-\end{figure}
-
-Na figura \ref{fig:3.2.0/broker_pub_sub}, o Broker armazena os tópicos e os ids de conexão dos clientes, 2 estava inscrito para ouvir as mensagens do tópico \textit{topic}, enquanto 3 enviava uma ordem de inscrição em \textit{another\_topic}, 1 envia ordem de publicação para \textit{topic}.
-
-
-\subsection{Tipos de MQTT}
-\label{subsection:tipos_mqtt}
-
-%% Tipos de MQTT 
-Com a evolução e o uso do protocolo, foram necessárias atualizações que contemplam funcionalidades que atendem  requisitos essenciais para aplicações da indústria. Como atender dispositivos que não usam a pilha TCP/IP e medidas de segurança (que serão melhor debatidas á frente). 
-
-Existe uma gama de dispositivos que utilizam protocolos específicos, geralmente leves, para redes locais e leves para o transporte de dado, a exemplo do ZigBee \cite{zigbee}. Para isso foi criada uma versão do MQTT para atender estes tipos de protocolos, substituindo a base TCP/IP por outros protocolos destas camadas, mantendo a camada de aplicação e o padrão Publish/Subscribe.
-
-Para resolver questões de segurança, foi criada uma variação do MQTT que adiciona camadas deste quesito ao protocolo de aplicação. Assim como o HTTPS o protocolo MQTTS é construído em cima do protocolo SSL/TLS (explicado em \ref{subsection:seguranca}), camada de segurança que também usa como base TCP/IP. Esta camada envolve o processo de encriptação dos cabeçalhos da aplicação e autenticação por passagem de certificados. 
-
-\subsection{Segurança de aplicações}
-\label{subsection:seguranca}
-
-%% SSL e outros tipos de encriptação de dados.
-SSL \cite{ssl} (Secure Sockets Layer) é a tecnologia de segurança padrão para estabelecer um link criptografado entre um servidor da Web e um cliente. Um certificado SSL em seu servidor e um navegador se conecta a ele, a presença do certificado SSL aciona o protocolo SSL (ou TLS), que criptografa as informações enviadas entre o servidor e cliente.
-
-O SSL opera diretamente no topo do protocolo de controle de transmissão (TCP), além de permitir que camadas de protocolo de aplicaçãoes sejam construídas por cima, agora com sob uma camada de segurança. Portanto, sob a camada SSL, as outras camadas de protocolo podem funcionar normalmente, como o HTTP e o MQTT.
-
-Com um certificado SSL, todos os invasores poderão saber qual IP e porta e quantos dados estão sendo enviados. Eles podem terminar a conexão, mas tanto o servidor quanto o usuário poderão dizer que isso foi feito por terceiros. No entanto, eles não serão capazes de interceptar qualquer informação, o que a torna essencialmente um passo ineficaz. O invasor pode descobrir qual nome de host,mas como a conexão é criptografada, as informações importantes permanecem seguras.
-
-Para poder criar uma conexão é requisitado um Certificado SSL. Quando você optar por ativar o SSL em seu servidor da Web, será solicitado que você responda a várias perguntas sobre a identidade do seu site e da sua empresa. Seu servidor da Web cria duas chaves criptográficas - uma chave privada e uma chave pública.
-
-A chave pública não precisa ser secreta e é colocada em uma solicitação de assinatura de certificado (CSR) - um arquivo de dados que também contém seus detalhes, então deve-se enviar o CSR. Durante o processo de solicitação do Certificado SSL, a Autoridade de Certificação validará seus detalhes e emitirá um Certificado SSL contendo seus detalhes e permitindo que você use SSL.
-
-Além do SSL existem outras formas de segurança. A maioria envolve encriptação. Como o uso de algoritmos de hash para encriptar as mensagens enviadas, ficando a cargo da aplicação desencriptar.
-
-A Interface aqui construída é transparente ao SSL, ou seja, pode ser implementada em cima ou não deste protocolo, os exemplos são feitos sem esta camada, porém basta criar ou adquirir um certificado em uma autoridade de certificação e gerar as chaves. As APIs usadas contemplam da opção de usarem clients SSL.
-
 \subsection{Plataformas}
 \label{subsection:plataformas}
 
@@ -171,24 +193,47 @@ Foi escolhida as plataformas microcontroladas pela arquitetura Espressif \cite{e
 \end{figure}
 
 
-Também foi implementada em Node.js (que será descrito abaixo) aplicações do Publisher para embarcados com sistemas operacionais baseados na arquitetura ARM \cite{arm}, como Raspberry Pi \cite{raspberry-pi} e sua arquitetura mais robusta \ref{fig:3.3.4/raspberry-pi-arch} , e Intel Galileo. Permitindo multi-uso entre as funções de Publisher e Subscriber, podendo ser utilizados como Hubs ou bridges de dados. Esses consoles possuem, processadores mais potentes, periféricos, Sistemas Operacionais, assim como entradas e saídas digitais.
+Também foi implementada em Node.js (que será descrito abaixo) aplicações do Publisher para embarcados com sistemas operacionai, \cite{arm}, como Raspberry Pi \cite{raspberry-pi} e sua arquitetura mais robusta \ref{fig:3.3.4/raspberry-pi-arch} , e Intel Galileo. Permitindo multi-uso entre as funções de Publisher e Subscriber, podendo ser utilizados como Hubs ou bridges de dados. Esses consoles possuem, processadores mais potentes, periféricos, Sistemas Operacionais, assim como entradas e saídas digitais.
 
-\begin{figure}[h!]
-\centering
-\includegraphics[width=13cm]{./02_Capitulos/02_Cap3/figures/raspberry-pi-power-architecture}
-\caption{A arquitetura do micro console Raspberry-Pi}
-\label{fig:3.3.4/raspberry-pi-arch}
-\end{figure}
 
 \subsubsection{Consoles}
 \label{subsubsection:consoles}
 
 Consoles são sistemas que contemplam sistemas operacionais, o que permitem mais liberdade para a implementação da interface. Foi escolhida então, realizar a implementação com Node.js \cite{nodejs}, uma engine de Javascript que permite criar aplicações no lado do servidor de um sistema, além de outras aplicações, como mobile e desktop. Possui extensas bibliotecas para HTTP e MQTT além de pipelines que permitem fácil comunicação de protocolos no mesmo processo, o que é fundamental para o conceito de escalabilidade deste projeto.
 
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=10cm]{./02_Capitulos/02_Cap3/figures/os-diagram}
+\caption{A arquitetura simplificada de dispositivos com Sistema Operacional}
+\label{fig:3.3.4/os-diagram}
+\end{figure}
+
+
 Além disso Node.js é uma ferramenta multiplataforma, com distribuições para Windows, Linux e MAC, além de versões para embarcados de arquitetura ARM, como o próprio Raspberry Pi. Com isso foram implementadas bibliotecas que constroem e interface sobre o MQTT, no lado Subscriber do sistema.
 
-\subsection{Persistência de dados}
-\label{subsection:persistencia}
+
+\section{Segurança de aplicações}
+\label{section:seguranca}
+
+%% SSL e outros tipos de encriptação de dados.
+SSL \cite{ssl} (Secure Sockets Layer) é a tecnologia de segurança padrão para estabelecer um link criptografado entre um servidor da Web e um cliente. Um certificado SSL em seu servidor e um navegador se conecta a ele, a presença do certificado SSL aciona o protocolo SSL (ou TLS), que criptografa as informações enviadas entre o servidor e cliente.
+
+O SSL opera diretamente no topo do protocolo de controle de transmissão (TCP), além de permitir que camadas de protocolo de aplicaçãoes sejam construídas por cima, agora com sob uma camada de segurança. Portanto, sob a camada SSL, as outras camadas de protocolo podem funcionar normalmente, como o HTTP e o MQTT.
+
+Com um certificado SSL, todos os invasores poderão saber qual IP e porta e quantos dados estão sendo enviados. Eles podem terminar a conexão, mas tanto o servidor quanto o usuário poderão dizer que isso foi feito por terceiros. No entanto, eles não serão capazes de interceptar qualquer informação, o que a torna essencialmente um passo ineficaz. O invasor pode descobrir qual nome de host,mas como a conexão é criptografada, as informações importantes permanecem seguras.
+
+Para poder criar uma conexão é requisitado um Certificado SSL. Quando você optar por ativar o SSL em seu servidor da Web, será solicitado que você responda a várias perguntas sobre a identidade do seu site e da sua empresa. Seu servidor da Web cria duas chaves criptográficas - uma chave privada e uma chave pública.
+
+A chave pública não precisa ser secreta e é colocada em uma solicitação de assinatura de certificado (CSR) - um arquivo de dados que também contém seus detalhes, então deve-se enviar o CSR. Durante o processo de solicitação do Certificado SSL, a Autoridade de Certificação validará seus detalhes e emitirá um Certificado SSL contendo seus detalhes e permitindo que você use SSL.
+
+Além do SSL existem outras formas de segurança. A maioria envolve encriptação. Como o uso de algoritmos de hash para encriptar as mensagens enviadas, ficando a cargo da aplicação desencriptar.
+
+A Interface aqui construída é transparente ao SSL, ou seja, pode ser implementada em cima ou não deste protocolo, os exemplos são feitos sem esta camada, porém basta criar ou adquirir um certificado em uma autoridade de certificação e gerar as chaves. As APIs usadas contemplam da opção de usarem clients SSL.
+
+
+\section{Persistência de dados}
+\label{section:persistencia}
 
 %% Bancos de dados
 Os dados adquiridos pela plataforma e suas camadas, são armazenados em memórias e enviados. Memórias voláteis que podem facilmente perder dados com quedas de energia o reaproveitamento do sobre-inscrição do próprio gerenciamento do sistemas, para garantir que os dados não sejam perdidos, é necessário que o sistema possua persistência, uma forma de memória não-volátil que armazene os dados sem energia.
@@ -208,8 +253,8 @@ O Arquivo é o documento onde os dados são armazenados, na estrutura definida. 
 
 
  
-\subsection{Bancos para Aplicações IoT}
-\label{subsection:bancos_IoT}
+\section{Bancos para Aplicações IoT}
+\label{section:bancos_IoT}
 
 Na área de Bancos de Dados (ou DBs), com escopo focado em IoT, há um porém. Para a estruturação de uma aplicação eficiente, não se deve usar qualquer tipo de banco. Devem-se escolher motores e estruturas de bancos adequadas para a aplicação. Não exite um critério definitivo que guia o desenvolvedor para melhor escolha. Mas algumas características de bancos de dados podem ser exploradas em aplicações IoT, formando um DB eficiente para tal.
 
