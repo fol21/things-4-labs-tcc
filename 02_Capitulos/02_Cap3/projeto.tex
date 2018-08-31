@@ -109,8 +109,8 @@ O Broker é o servidor do padrão Publish/Subscribe, ele efetivamente executa as
 Na figura \ref{fig:3.2.0/broker_pub_sub}, o Broker armazena os tópicos e os ids de conexão dos clientes, 2 estava inscrito para ouvir as mensagens do tópico \textit{topic}, enquanto 3 enviava uma ordem de inscrição em \textit{another\_topic}, 1 envia ordem de publicação para \textit{topic}.
 
 
-\subsection{Tipos de MQTT}
-\label{subsection:tipos_mqtt}
+\subsubsection{Tipos de MQTT}
+\label{subsubsection:tipos_mqtt}
 
 %% Tipos de MQTT 
 Com a evolução e o uso do protocolo, foram necessárias atualizações que contemplam funcionalidades que atendem  requisitos essenciais para aplicações da indústria. Como atender dispositivos que não usam a pilha TCP/IP e medidas de segurança (que serão melhor debatidas á frente). 
@@ -193,13 +193,13 @@ Foi escolhida as plataformas microcontroladas pela arquitetura Espressif \cite{e
 \end{figure}
 
 
-Também foi implementada em Node.js (que será descrito abaixo) aplicações do Publisher para embarcados com sistemas operacionai, \cite{arm}, como Raspberry Pi \cite{raspberry-pi} e sua arquitetura mais robusta \ref{fig:3.3.4/raspberry-pi-arch} , e Intel Galileo. Permitindo multi-uso entre as funções de Publisher e Subscriber, podendo ser utilizados como Hubs ou bridges de dados. Esses consoles possuem, processadores mais potentes, periféricos, Sistemas Operacionais, assim como entradas e saídas digitais.
+Também foi implementada em Node.js (que será descrito abaixo) aplicações do Publisher para embarcados com sistemas operacionai, \cite{arm}, como Raspberry Pi \cite{raspberry-pi} e sua arquitetura mais robusta, e Intel Galileo. Permitindo multi-uso entre as funções de Publisher e Subscriber, podendo ser utilizados como Hubs ou bridges de dados. Esses consoles possuem, processadores mais potentes, periféricos, Sistemas Operacionais, assim como entradas e saídas digitais.
 
 
 \subsubsection{Consoles}
 \label{subsubsection:consoles}
 
-Consoles são sistemas que contemplam sistemas operacionais, o que permitem mais liberdade para a implementação da interface. Foi escolhida então, realizar a implementação com Node.js \cite{nodejs}, uma engine de Javascript que permite criar aplicações no lado do servidor de um sistema, além de outras aplicações, como mobile e desktop. Possui extensas bibliotecas para HTTP e MQTT além de pipelines que permitem fácil comunicação de protocolos no mesmo processo, o que é fundamental para o conceito de escalabilidade deste projeto.
+Consoles são sistemas que contemplam sistemas operacionais, o que permitem mais liberdade para a implementação da interface. Foi escolhida então, realizar a implementação com Node.js \cite{nodejs}, um ambiente de Javascript que permite criar aplicações fora do browser, além de outras aplicações, como mobile e desktop. Possui extensas bibliotecas para HTTP e MQTT além de pipelines que permitem fácil comunicação de protocolos no mesmo processo, o que é fundamental para o conceito de escalabilidade deste projeto.
 
 
 \begin{figure}[h!]
@@ -210,7 +210,7 @@ Consoles são sistemas que contemplam sistemas operacionais, o que permitem mais
 \end{figure}
 
 
-Além disso Node.js é uma ferramenta multiplataforma, com distribuições para Windows, Linux e MAC, além de versões para embarcados de arquitetura ARM, como o próprio Raspberry Pi. Com isso foram implementadas bibliotecas que constroem e interface sobre o MQTT, no lado Subscriber do sistema.
+Além disso Node.js é uma ferramenta multiplataforma, com distribuições para Windows, Linux e MAC, além de versões para embarcados de arquitetura ARM, como o próprio Raspberry Pi. Possui Módulos que permitem acessar processos do sistema operacional como ilustrado na \ref{fig:3.3.4/os-diagram} permitindo acesso a Rede além de informações do próprio sistema. O ambiente permite a implementação com programação orientada a objeto, Publishers, Data Streams, Subscribers, são instancias de classes mostradas no apêndice em \ref{section:codigos_fonte}, permitindo que a aplicação seja feita em um processo (obs: este processo pode executar outros processos, com algum overhead).  Com isso foram implementadas bibliotecas que constroem e interface sobre o MQTT, no lado Subscriber do sistema.
 
 
 \section{Segurança de aplicações}

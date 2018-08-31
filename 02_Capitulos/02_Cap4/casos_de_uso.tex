@@ -9,7 +9,7 @@ No capítulo \ref{chapter:projeto} descrevemos o funcionamento da Interface e su
 
 Este exemplo tem como objetivo medir a temperatura da CPU de um console com baseado em suas atividades, serviços e processos em execução. A aplicação pode ser escalada para a obtenção de outras informações da CPU e do sistema, podendo assim disponibilizar análises de desempenho da plataforma, além de montar perfis de uso do sistema e administrar seu uso.
 
-Para isso precisaremos utilizar um Publisher no console a ter informações de temperatura a ser coletadas e um Subscriber para receber estas temperaturas via MQTT e persisti-las em banco de dados. Ambas as aplicações utilizarão as APIs em Javascript, utilizando Node.js para coletar as informações do sistema, implementar o Publisher, o Subscriber, o driver para MongoDB (também disponível em anexo) e a geração de um gráfico utilizando a plataforma plotly \cite{plotly}.
+Para isso precisaremos utilizar uma instância da classe Publisher disponível  \ref{subsection:publishers_javascript} como e no console a ter informações de temperatura a ser coletadas e uma instãncia do Subscriber \ref{subsection:subscribers_javascript} para receber estas temperaturas via MQTT e persisti-las em banco de dados. Ambas as aplicações utilizarão as APIs em Javascript, utilizando Node.js para coletar as informações do sistema, implementar o Publisher, o Subscriber, o driver para MongoDB (também disponível em anexo) e a geração de um gráfico utilizando a plataforma plotly \cite{plotly}. Isso foi implementado no código \ref{subsection:teste_fonte}.
 
 
 \begin{figure}[h!]
@@ -24,13 +24,13 @@ A \ref{fig:4.1.0/fluxo_controle_temp} mostra todo o fluxo das duas aplicações,
 
 
 % Inserção no banco
-Repare que a medição depende da data e da hora de inserção no banco, o tempo de chegada até a persistência varia muito com a latência e com o processamento da aplicação, desta forma temos uma medida mais constante. A \ref{fig:4.1.0/comapass} mostra o formato de dado armazenado, com a ferramenta Compass para visualização de dados do MongoDB. Repare que lidamos com a estrutura de dados em documento porém obrigatoriamente todo documento da Interface possui o timestamp da inserção no banco, o campo data é o objeto de dados em medição.
+Repare que a medição depende da data e da hora de inserção no banco, o tempo de chegada até a persistência varia muito com a latência e com o processamento da aplicação, desta forma temos uma medida mais constante. A \ref{fig:4.1.0/compass} mostra o formato de dado armazenado, com a ferramenta Compass para visualização de dados do MongoDB. Repare que lidamos com a estrutura de dados em documento porém obrigatoriamente todo documento da Interface possui o timestamp da inserção no banco, o campo data é o objeto de dados em medição. A comunicação com o banco pode ser feita por uma instância da classe MongoDataClient em   \ref{subsection:subscribers_javascript} que cuida da inserção com  o \textit{timestamp} e o objeto de dados em \textit{data}.
 
 \begin{figure}[h!]
 \centering
 \includegraphics[width=15cm]{./02_Capitulos/02_Cap4/figures/compass}
 \caption{Visualização dos dados armazenados em documento em uma coleção do MongoDB}
-\label{fig:4.1.0/comapass}
+\label{fig:4.1.0/compass}
 \end{figure}
 
 % Visualização com o plotly
