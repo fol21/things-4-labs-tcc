@@ -212,6 +212,49 @@ Consoles são sistemas que contemplam sistemas operacionais, o que permitem mais
 
 Além disso Node.js é uma ferramenta multiplataforma, com distribuições para Windows, Linux e MAC, além de versões para embarcados de arquitetura ARM, como o próprio Raspberry Pi. Possui Módulos que permitem acessar processos do sistema operacional como ilustrado na \ref{fig:3.3.4/os-diagram} permitindo acesso a Rede além de informações do próprio sistema. O ambiente permite a implementação com programação orientada a objeto, Publishers, Data Streams, Subscribers, são instancias de classes mostradas no apêndice em \ref{section:codigos_fonte}, permitindo que a aplicação seja feita em um processo (obs: este processo pode executar outros processos, com algum overhead).  Com isso foram implementadas bibliotecas que constroem e interface sobre o MQTT, no lado Subscriber do sistema.
 
+\section{Arquiteturas e Assíncronismo}
+\label{section:arquitetura}
+
+Na seção anterior foi discutido a implementação em Hardware do sistema e as diferenças das tecnologias contempladas. Sistemas embarcados 
+possuem muito menos opções de implementação que um console gerido por um sistema operacional, sendo uma das principais o paralelismo de processos, a capacidade de ser multi-tarefas, por isso exigiu-se duas filosofias diferentes de implementação do sistema para os dois tipos de plataformas.
+
+\subsection{Embarcados Síncronos}
+\label{subsection:embarcados_sinc}
+
+Sistemas embarcados possuem um poder de processamento limitado, apesar da tendência de elevar este poder na ponta, estes sistemas são geralmente Microcontrolados. Microcontroladores possuem arquiteturas mais simples, geralmente executando instruções de um programa compilado para linguagem do MCU e gravado neste. Não há paralelismo, cada instrução é síncrona, ou seja são executadas uma a uma, a próxima deve esperar a anterior acabar de ser executada pela unidade de processamento.
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=12cm]{./02_Capitulos/02_Cap3/figures/sinc_implementation}
+\caption{Diagrama simplificado de uma rotina padrão seguida pela implementação em Microcontroladores}
+\label{fig:sinc-implementation}
+\end{figure}
+
+A \ref{fig:sinc-implementation} simplifica a lógica da implementação em dispositivos síncronos como microcontroladores. No Apêndice deste documento pode-se encontrar as implementações em C++. O programa começa configurando o objeto Publisher (MQTT) com configurações de conexão a rede e o broker, além de outras definições do desenvolvedor. O bloco de loop repete-se indeterminadamente, verificando o estado de conexão da aplicação que passa pelos seguintes estados:
+
+\begin{itemize}
+\item INIT: Estado inicial, verifica conexão com rede;
+\item NETWORK: Tem conexão com rede, verifica conexão com Broker;
+\item BROKER: Tem conexão com Broker, inicia configurações dos Data Streams;
+\item READY: Pronto para enviar e receber mensagens !
+\end{itemize}
+
+Quando o estado está em READY, a aplicação está pronto para processar mensagens recebidas e publicar, lembrando que está é uma lógica básica, o desenvolvedor pode adicionar outros passos, mas a verificações de estado e as configurações do Publisher são obrigatórias para o funcionamento do Sistema. Repare que toda a lógica é sequencial, síncrona, não há paralelismo na rotina.
+
+\subsection{Consoles Assíncronos}
+\label{subsection:consoles_assinc}
+
+Consoles são dispositivos que possuem uma Arquitetura mais complexa, consequentemente mais poder de processamento. Ilustrado na  \ref{fig:3.3.4/os-diagram}, a presença de um sistema operacional gerenciando processos do sistema e de aplicações e informações do Hardware permitem a execução de múltiplas tarefas em paralelo, o que caracteriza processos Assíncronos. A linguagem utilizada para a implementação foi Javascript com o ambiente Node.js, um interpretador da linguagem que pode ser usado fora de um Brownser. Node possui uma gama de suportes para a implementação de funções assíncronas, permitindo o sistema a explorar essa característica e, diferentemente dos embarcados microcontrolados, executar Threads em paralelo, como receber e enviar mensagens em paralelo simultaneamente.
+
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=13cm]{./02_Capitulos/02_Cap3/figures/async-implementation}
+\caption{Diagrama simplificado de uma rotina assíncrona padrão em Consoles}
+\label{fig:async-implementation}
+\end{figure}
+
+A \ref{fig:async-implementation} mostra o funcionamento simplificado das aplicações de Publisher e Subscriber em Node.js. A aplicação faz as configurações específicas de cada objeto Publisher ou Subscriber e logo após entra em um Loop de enventos, onde existem eventos de Conexão com rede, com o Broker e de envio/recebimento de mensagens. Estes eventos quando são acionados pelo sistema, executam callbacks, funções assíncronas registradas previamente nas configurações. Essas funções assíncronas são gerenciadas internamente pelo Node.js e direcionadas ao loop de eventos.
 
 \section{Segurança de aplicações}
 \label{section:seguranca}
@@ -263,7 +306,7 @@ Como pode ser observado em \cite{Damodaran}, uma aplicação eficiente de Bancos
 
 \begin{figure}[h!]
 \centering
-\includegraphics[width=13cm]{./02_Capitulos/02_Cap3/figures/LSM_btree}
+\includegraphics[width=14cm]{./02_Capitulos/02_Cap3/figures/LSM_btree}
 \caption{Comparação de Escrita e Leitura entre LSM e B+, retirado de \cite{btrees-vs-lsmtrees}}
 \label{fig:3.3.5/b-lsm}
 \end{figure}
