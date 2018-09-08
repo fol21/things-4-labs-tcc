@@ -258,10 +258,45 @@ O Arquivo é o documento onde os dados são armazenados, na estrutura definida. 
 
 Na área de Bancos de Dados (ou DBs), com escopo focado em IoT, há um porém. Para a estruturação de uma aplicação eficiente, não se deve usar qualquer tipo de banco. Devem-se escolher motores e estruturas de bancos adequadas para a aplicação. Não exite um critério definitivo que guia o desenvolvedor para melhor escolha. Mas algumas características de bancos de dados podem ser exploradas em aplicações IoT, formando um DB eficiente para tal.
 
-Como pode ser observado em \cite{Damodaran}, uma aplicação eficiente de Bancos e IoT está ligada ao tempo de inserção de dados no banco,  o tempo total em que a aplicação leva para enviar, aplicar a busca de onde o dado deve ser inserido no documento e de fato armazenar, podem ser feitas várias inserções de pequenos pacotes de dados, dependendo do tamanho da mensagem. Esta característica está ligada ao motor do banco, que determina como o dado será armazenado, e quanto ele leva para escrever o dado no documento. A maioria dos dados são armazenados em estruturas B+- Trees , porém pode-se observar em \cite{Damodaram} e \cite{oneal} que a estrutura LSM Tree, feita através da B+-, possui maior eficiência na escrita.
+Como pode ser observado em \cite{Damodaran}, uma aplicação eficiente de Bancos e IoT está ligada ao tempo de inserção de dados no banco,  o tempo total em que a aplicação leva para enviar, aplicar a busca de onde o dado deve ser inserido no documento e de fato armazenar, podem ser feitas várias inserções de pequenos pacotes de dados, dependendo do tamanho da mensagem. Esta característica está ligada ao motor do banco, que determina como o dado será armazenado, e quanto ele leva para escrever o dado no documento. A maioria dos dados são armazenados em estruturas B+Trees \cite{b-tree}, porém pode-se observar em \cite{Damodaran} que a estrutura LSM Tree \cite{O'Neal-Gawlick-Cheng} possui maior eficiência na escrita.
+
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=13cm]{./02_Capitulos/02_Cap3/figures/LSM_btree}
+\caption{Comparação de Escrita e Leitura entre LSM e B+, retirado de \cite{btrees-vs-lsmtrees}}
+\label{fig:3.3.5/b-lsm}
+\end{figure}
+
+Comparando as duas estruturas, como mostrado em \ref{fig:3.3.5/b-lsm}, percebe-se que a estrutura LSM sustenta até 2x mais inserções da estrutura B+, hoje os Bancos de Dados modernos utilizam desta vantagem, devida a nova tendência de aplicações de coletar dados constantemente, o que leva a operação de escrita no banco ter mais importância e ocorrências que a leitura e explica a migração para a estrutura LSM.
 
 Existem várias abstrações de Bancos de dados. Em \cite{Rautmare-Bhalerao} compara-se e conclui-se que o banco MongoDB, um banco NoSQL possui um tempo de resposta de inserção menor que o MySQL (bancos relacionais), porém o último é mais estável. De fato bancos NoSQL são, em geral, mais leves, possui uma flexibilidade maior para lidar e estruturar dados, o que fazem estes tipos de Banco mais favoráveis a aplicações de IoT. Porém outras estruturas como um banco divido em timescale mostram-se eficientes SQL ou não.
 
 Outros aspectos podem contribuir para a eficiência de persistência de dados. Criar bancos locais diminuem a latência e a necessecidade de conexão, aumentando a capacidade de inserção de dados, além de ser uma forma de backup de dados. Um banco local, geralmente fica em uma plataforma como em \cite{Paethong-Sato-Namiki}, são bancos leves em aplicações de baixo consumo, devido a capacidade de processamento limitada. Seu papel é geralmente para armazenar os dados quando não há conexão, e quando esta é restabelecida os dados são enviados para um banco remoto com mais capacidade de processamento e aplicações. %% Falar sobre bancos locais.
 
 Dentre os bancos estudados, alguns se destacam como o Cassandra, usado pela Netflix para coletar dados sobre o comportamento do usuário na plataforma ou o InfluxDB, um banco de arquitetura TimeScale, feito para aplicações em tempo real. Mas para esse projeto, foi utilizado o MongoDB \cite{mongodb}, um banco NoSQL, leve, de facil integração com as plataformas utilizadas e que posui implementações de motores que priorizam a eficiência na escrita de dados, como a LSM tree.
+
+\section{Indexação de dados e Timestamp}
+\label{section:timestamp}
+
+Na seção anterior foram discutidos estruturas da organização de dados e o formato de armazenamento de dados como o formato de Documento e TimeScale. É importante que estes formatos tenham formas eficientes de indexação, de modo a facilitar a busca e a análise de dados.
+
+Em uma aplicação de IoT, que envolve coleta de dados em tempo real, é fundamental, independentemente do formato escolhido, a informação de quando este dado foi colhido (data e hora). Isto permite a análise dos dados ao longo do , conforme forem armazenados. Aplicações de decisão e análise utilizam ferramentas estatística com base nas ocorrências temporais, projetando previsões e classificação. No projeto atual, foi implementado o MongoDB um banco de dados de documentos. Cada documento é indexado por uma identificação única como mostrado na \ref{fig:document-model}, permitindo também criar relações entre documentos.
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=10cm]{./02_Capitulos/02_Cap3/figures/document-model}
+\caption{O formato de documento no MongoDB}
+\label{fig:document-model}
+\end{figure}
+
+O banco também permite adicionar outros parâmetros de indexação definidos pelo desenvolvedor, foi utilizado desta funcionalidade para adicionar um campo de Timestamp, uma informação de data e hora da inserção no banco. Na implementação foi utilizado o formato Unix Timestamp, o número de milisegundos que se passaram desde 1 de Janeiro de 1970 ás 00:00:00 (UTC), a \ref{fig:document-timestamp} ilustra o formato de documento completo usado no sistema, o campo de dados é definido pelo desenvolvedor. 
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=8cm]{./02_Capitulos/02_Cap3/figures/document-timestamp}
+\caption{Adição de parâmetro de timestamp em milisegundos ao documento}
+\label{fig:document-timestamp}
+\end{figure}
+
+Vale ressaltar a existência de uma nova geração de Bancos de Dados TimeScale, um formato parecido com o de Documento, porém com indexação feita por Timestamp ao invés de uma chave única. Em destaque o Banco InfluxDB, que possui estrutura LSM-Tree além de ser um banco TimeScale, o que o faz ser utilizado cada vez mais em aplicações IoT.
