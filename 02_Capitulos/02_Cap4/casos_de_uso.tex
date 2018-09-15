@@ -13,6 +13,7 @@ A escalabilidade do sistema será testada em partes, a primeira será analisar m
 
 Para isso precisaremos utilizar uma instância da classe Publisher disponível  \ref{subsection:publishers_javascript} como e no console a ter informações de temperatura a ser coletadas e uma instãncia do Subscriber \ref{subsection:subscribers_javascript} para receber estas temperaturas via MQTT e persisti-las em banco de dados. Ambas as aplicações utilizarão as APIs em Javascript, utilizando Node.js para coletar as informações do sistema, implementar o Publisher, o Subscriber, o driver para MongoDB (também disponível em anexo) e a geração de um gráfico utilizando a plataforma plotly \cite{plotly}. Isso foi implementado no código \ref{subsection:teste_fonte}.
 
+CPUs são tecnologias feitas por transistores. Milhões de aglomerações de MOSFETS que começam a  ter perda de perfomance no processador conforme o aumento de temperatura, em \cite{jose}, pode-se observar os efeitos do aumento de  temperatura nos parâmetros do MOSFET especialmente na queda de mobilidade e na velocidade de saturação que provocam perda de perfomance. CPUs modernas são capazes de ajustar suas frequências operacionais, a fim de reduzir seu consumo de energia ou fornecer a máxima potência, conforme necessário e possuem também  proteção térmica extremamente robusta. Se a unidade começar a operar acima do limite térmico, ela começará a reduzir a frequência para evitar uma falha catastrófica.
 
 \begin{figure}[h!]
 \centering
@@ -62,6 +63,19 @@ Finalizada a medição de uma CPU, pode-se escalar para uma Análise mais elabor
 Ambas as plataformas foram configuradas para enviar informações de temperatura com intervalos de um segundo, durante um período de cerca de uma hora e meia, ao completar 10 mil amostras totais, um gráfico é gerado. Cada plataforma contribui com cerca de metade das amostras, porém cada uma possui uma rotina e capacidade de processamento, fora o tempo de envio para Broker, é de se esperar que o número de amostras de cada um não seja igual.
 Pela \ref{fig:temp-devices-3} pode-se observar as diferenças de temperatura e o comportamento das duas CPUS. O ESP32 com sua arquitetura mais simples, mantem-se relativamente constante a 30 graus Celsius,  isso pode ser explicado devido ao fato do ESP estar rodando somente um programa devido suas limitações.
 A CPU i7 varia sua temperatura em torno de 50 graus Celsius, possuindo variações mais bruscas, devido ao fato do processador está executando múltiplo processos. Durante este experimento o computado da CPU foi usado normalmente, passando por cenários de hibernação até o uso do Browser, recebendo requisições de páginas da web, assistindo vídeos e áudios, provocando as variações de temperatura semelhantes ao primeiro teste.
+
+
+Por último o sistema foi utilizado em um teste em múltiplos computadores com processadores distintos no Laboratório PROSAICO. A finalidade foi observar o comportamento e a robustês da aplicação ao receber dados de múltiplas fontes em larga escala (cerca de 15 mil amostras totais no banco).
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=16cm]{./02_Capitulos/02_Cap4/figures/temp-devices-5}
+\caption{Comparação das temperaturas em múltiplos processandores}
+\label{fig:temp-devices-5}
+\end{figure}
+
+Na \ref{fig:temp-devices-5}, observa-se vários níveis de temperatura média entre os processadores, todos executando processos comuns dos sistemas operacionais em máquinas Windows e Linux. Esta diferença está atrelada aos fatores de resfriagem térmica e a capacidade de processamento. Vale ressaltar alguns comportamentos. Os dois processadores de temperatura mais baixa, por volta de 30 graus célsius possuem gabinetes mais novos e apresentam um sistema de resfriamento melhor que os mais antigos. Já o processador que registrou uma maior temperatura média, fora o processador do computador usado como servidor Web e IoT do laboratório, hospedando o Broker Mosquitto do sistema, inclusive. Dois fatores contribuiram para essa mudança abrupta de tecnologia, os processos executados dos serviços, porém majoritariamente pela manuntenção do resfriamento do processador, foi detectado que a CPU estava sem pasta térmica, grande responsável pela troca de calor na prórpia.
+
 
 \section{Aplicação: Automação Residencial}
 \label{section:residencial}
