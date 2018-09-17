@@ -4,6 +4,65 @@
 \chapter{Apêndice}
 \label{chapter:apendice}
 
+\section{Guias de instalação}
+\label{section:guia}
+
+\textbf{Atenção:} Essas instruções são uma versão de quando este trabalho foi publicado, para obter a versão mais atualizada e outras versões, acesse \url{https://github.com/fol21}. Este guia tem como reproduzir os testes feitos no sistema, que foi testado em distribuições de Windows 10 e Linux.
+
+\subsection{Configurando Broker}
+\label{subsection:guia_broker}
+
+\begin{enumerate}
+
+\item Acesse \url{https://mosquitto.org/download/} e siga as instruções para baixar e instalar o Mosquitto;
+\item No terminal execute o comando \textit{mosquitto -d}
+\item Use o IP e a porta configurada nos exemplos de Publisher e Subscriber;
+\item Em C++ as configurações são encontradas no próprio código;
+\item Em Javascript acesse o arquivo \textit{config.json} no diretório \textit{example/*/resources} e mude as configurações de IP e Porta;
+\end{enumerate}
+
+\subsection{Publishers em C++}
+\label{subsection:guia_publishers_cpp}
+
+\begin{enumerate}
+
+\item Siga as instruções de instalação em \url{http://docs.platformio.org/en/latest/installation.html};
+\item Acesse \url{https://docs.espressif.com/projects/esp-idf/en/latest/get-started/establish-serial-connection.html} e instale os drivers adequados para o ESP32;
+\item Acesse \url{https://github.com/fol21/things-4-labs-acquirer-platform} e baixe o projeto;
+\item No diretório do projeto digite os comandos \textit{pio run -t upload -e esp32};
+\end{enumerate}
+
+\subsection{Publishers em Javascript}
+\label{subsection:guia_publishers_javascript}
+
+\begin{enumerate}
+\item Acesse \url{https://nodejs.org/en/} e baixe sua versão do Node.js na versão 8 ou maior;
+\item Acesse \url{https://github.com/fol21/things-4-labs-acquirer-raspberrypi} e baixe o projeto;
+\item Entre no diretório examples/gpio, presente no projeto;
+\item Coloque as informações de IP e Porta no arquivo \textit{resources/config.json};
+\item Execute o comando como administrador \textit{npm install};
+\item Execute o comando como administrador \textit{node index.js};
+
+\end{enumerate}
+
+
+\subsection{Subscribers em Javascript}
+\label{subsection:guia_subscribers_javascript}
+
+\begin{enumerate}
+\item Acesse \url{https://nodejs.org/en/} e baixe sua versão do Node.js na versão 8 ou maior;
+\item Acesse \url{https://docs.mongodb.com/manual/installation/} e siga as instruções para instalar e iniciar o mongodb conforme seu Sistema Operacional;
+\item Crie uma conta gratuita em \url{https://plot.ly/};
+\item Acesse \url{https://github.com/fol21/things-4-labs-console-subscriber} e baixe o projeto;
+\item Entre no diretório examples/simple-subscriber, presente no projeto;
+\item Coloque as informações de IP e Porta no arquivo \textit{resources/config.json};
+\item Coloque seu Id e chave da sua conta do Plotly em \textit{index.js};
+\item Execute o comando como administrador \textit{npm install};
+\item Execute o comando como administrador \textit{node index.js};
+
+\end{enumerate}
+
+
 \section{Códigos Fonte}
 \label{section:codigos_fonte}
 
