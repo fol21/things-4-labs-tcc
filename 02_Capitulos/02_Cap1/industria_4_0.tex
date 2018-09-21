@@ -1,21 +1,25 @@
-\chapter{Indústria 4.0 e Internet das Coisas}
-\label{chapter:industria_4_0_iot}
+\chapter{Introdução ao Projeto}
+\label{chapter:intro}
 
-A revolução dos dados atingiu praticamente todas as áreas de engenharia elétrica, desde a eletrônica, desenvolvendo dispositivos capazes de receber dados telemétricos, processa-los e envia-los para demais hubs, a servidores de armazenamento de dados, recorrentemente chamados de Data Warehouses. Esse conjunto de mudanças engloba a Indústria 4.0, uma indústria que capta dados de suas máquinas em tempo real em larga escala, analisa, armazena, e utiliza inteligência artificial e estatística, para tomada de decisões estratégicas, contando sempre , é claro, com ajustes humanos.
+O cenário atual do desenvolvimento tecnológico encontra-se no meio de uma quarta revolução industrial. Nunca se produziu tantos dados e se utilizou redes como a própria internet para propaga-los. É de se esperar que tanto a academia e diferentes mercados demandem inovações para o compartilhamento desses dados em tempo real ou próximo disso. Aquecendo o mercado que engloba transporte, análise e inteligência de dados.
+
+Este projeto propõe uma interface para comunicação entre as diferentes tecnologias e camadas de rede, de forma que o desenvolvedor só se preocupe em  implementar e configurar uma interface para mapear a melhor opção de ferramentas para a aplicação. O projeto lida com protocolos baseados na pilha TCP/IP, uma unanimidade em redes conectadas a internet. Podendo se estender para outras protocolos de aplicações de escopo fechado. O foco está no protocolo de aplicação MQTT (\textit{Message Queuing Telemetry Transport}) \cite{mqtt}, um protocolo que opera sobre o TCP/IP, leve e extremamente utilizado para compartilhamento dados telemétricos, de estado e de pequenas mensagens. Oferecendo uma API para aquisição, transmissão, recepção e armazenamento de dados telemétricos..
+
+A Internet das Coisas é a rede que permite a conexão e compartilhamento de dados  de dispositivos físicos . Ela é derivada de métodos de comunicação entre máquinas e telemetria. Pode ser dissecada em três camadas de aquisição, comunicação e aplicação  podendo ser implementada utilizando diversos protocolos de comunicação, dependendo da tecnologia disponível. É importante que sistemas IoT sejam projetados de forma a atender a aplicação eficientemente, porém tal tarefa não é fácil nem simples. Este projeto oferece uma interface que permite facilitar tal tarefa.
 
 \section{Internet das Coisas}
 \label{section:iot}
 
-"A Internet das Coisas tem o potencial de mudar o mundo. Assim como a Internet fez. Talvez até mais"\cite{ashton:iot}. Uma tradução livre de Rampim \cite{Rampim:iot} da frase de Kevin Ashton, cofundandor do Auto-ID Center, em 1999. Apesar de ser um nome feito somente para chamar atenção, foi a primeira citação da expressão Internet das Coisas, e de lá vingou.
+"A Internet das Coisas tem o potencial de mudar o mundo. Assim como a Internet fez. Talvez até mais" \cite{ashton:iot}. Uma tradução livre de Rampim \cite{Rampim:iot} da frase de Kevin Ashton, cofundandor do Auto-ID Center, em 1999. Apesar de ser um nome feito somente para chamar atenção, foi a primeira citação da expressão Internet das Coisas, e de lá vingou.
 
-Dentre o meio da Indústria 4.0, encontra-se a internet das coisas ou IoT, responsável por estruturar as aplicações de aquisição, transmissão e armazenamento de dados a serem analisados. Não é uma surpresa que este setor envolva áreas como eletrônica, computação e telecomunicações em um pacote só. De fato suas camadas são mundos diferentes interligados a um propósito : transmitir dados sobre um dispositivo e/ou para um dispositivo em tempo real. Segundo a Cisco IBSG \cite{cisco:ibsg}, há mais objetos conectados que a própria população mundial, fazendo com que o ano de 2009 ser considerado o ano de nascimento do IoT.
+No contexto da Indústria 4.0, encontra-se a internet das coisas ou IoT, responsável por estruturar as aplicações de aquisição, transmissão e armazenamento de dados a serem analisados. Não é uma surpresa que a Internet das Coisas envolva áreas como eletrônica, computação e telecomunicações em um pacote só. De fato as camadas de IoT são mundos diferentes interligados a um propósito: transmitir dados sobre um dispositivo e/ou para um dispositivo em tempo real. Segundo a Cisco IBSG, Cisco Internet Business Solutions Group \cite{cisco:ibsg}, há mais objetos conectados que pessoas no mundo, fazendo com que o ano de 2009 seja considerado o ano de nascimento da IoT.
 
-Pode-se definir IoT como a estrutura que comunica dispositivos em rede, permitindo a transmissão de dados sobre estes em tempo real. É a ponte que permite a troca de informações sobre um dispositivo, qual seu status, seu desempenho, suas condições físicas e do ambiente ao seu redor. Mas, para que este ciclo esteja completo é necessário camadas que desempenham tarefas específicas, para que o dado chegue a quem ou a o que está esperando.
+Pode-se definir IoT como a estrutura que comunica dispositivos em rede, permitindo a transmissão de dados sobre eles em tempo real. Essa estrutura permite a troca de informações sobre um dispositivo, qual seu estado, seu desempenho, suas condições físicas e do ambiente ao seu redor. Mas, para que este ciclo esteja completo são necessárias camadas que desempenham tarefas específicas, para que o dado chegue a quem ou a o que o está esperando.
 
 \section{Visão geral de uma aplicação IoT}
 \label{section:overview}
 
-Observe  a \ref{fig:1.1.0/iot_app}, temos uma rede de N sensores que enviam dados telemétricos e N atuadores que recebem ordens para executar uma função, ambos estão em rede e podem receber e enviar informação em tempo real. O servidor, que pode ser um Broker como será descrito mais tarde neste trabalho, encaminha os dados (ou mensagens) para as aplicações do banco de dados, que é utilizado para Análise destes e recebe informações do controlador, que por sua vez envia mensagens de decisões baseada na análise de dados de alguma forma estas são transmitidas para os atuadores.
+Na \ref{fig:1.1.0/iot_app} ilustrada, temos uma rede de N sensores que enviam dados telemétricos e M atuadores que recebem ordens para executar uma função, todos estão em rede e podem receber e enviar informação em tempo real. O servidor, que pode ser um Broker como será descrito adiante neste trabalho, encaminha os dados (ou mensagens) para o banco de dados. O Banco é utilizado para análise dos dados, o controlador por sua vez envia as mensagens de decisões baseada na análise de dados a serem transmitidas para os atuadores.
 
 \begin{figure}[h!]
 \centering
@@ -24,24 +28,24 @@ Observe  a \ref{fig:1.1.0/iot_app}, temos uma rede de N sensores que enviam dado
 \label{fig:1.1.0/iot_app}
 \end{figure}
 
-Porém o sensor 1 está localizado em um determinado cenário com usas próprias características físicas e de rede, assim como outros estão em outro cenário. Supondo que o primeiro seja uma rede com poucos sensores e o segundo cenário seja uma rede com um grande fluxo de dados, sujeito a congestionamento. Seria uma grande ajuda que o  sistema se ajustasse a estas mudanças de cenário.
+O sensor 1 está imerso em um ambiente com usas próprias características físicas e de rede, isso ocorre com todos, isto é cada sensor está imerso num cenário próprio, variando de redes com poucos sensores a redes com grande fluxo de dados, sujeito a congestionamento. Assim, seria de grande ajuda que o  sistema se ajustasse aos diferentes cenários.
 
-Este trabalho visa implementar um sistema que utiliza o protocolo de aplicação MQTT  ( \ref{subsection:mqtt}), para transmissão de dados em tempo real entre dispositivos, oferecendo suporte a plataformas embarcadas e para consoles com sistemas operacionais (Linux, Windows). O sistema contempla também persistência de dados utilizando banco de dados MongoDB (em  \ref{section:bancos_IoT}), com o diferencial de se adaptar a cenários através de canais de dados chamados Data Streams, oferecendo diferentes configurações que podem otimizar o envio de dados em cada cenário.
+Este trabalho visa implementar um sistema que utiliza o protocolo de aplicação MQTT, para transmissão de dados em tempo real entre dispositivos). O sistema contempla também persistência de dados utilizando banco de dados MongoDB, com o diferencial de se adaptar a cenários através de canais de dados chamados Data Streams, oferecendo diferentes configurações que podem otimizar o envio de dados em cada cenário.
 
 \begin{figure}[h!]
 \centering
 \includegraphics[width=10cm]{./02_Capitulos/02_Cap1/figures/iot_app-layers}
-\caption{Como a camada IoT se encaixa na aplicação}
+\caption{A aplicação dividida em blocos exercendo um papel em uma aplicação IoT}
 \label{fig:1.1.0/iot_app-layers}
 \end{figure}
 
 
-O sistema percorre toda a camada de IoT como na \ref{fig:1.1.0/iot_app-layers}, da aquisição de dados a persistência destes, para entender melhor esta camada, iremos descrever o projeto e implementação em cada passo do sistema.
+Cada bloco é responsável por uma tarefa no sistema IoT, da aquisição de dados a persistência destes, conforme ilustrado na \ref{fig:1.1.0/iot_app-layers}. Para entender melhor cada tarefa, será descrito o projeto e as implementações em cada bloco no sistema.
 
-\section{As Camadas do IoT}
+\section{As Camadas da IoT}
 \label{section:camadas_iot}
 
-Semelhante a camada de rede, a camada de IoT também exerce funções específicas no transporte de dados, e a camada acima não necessariamente precisa saber como a inferior funciona, somente precisa dos dados que esta camada entrega e executar suas tarefas sobre estes até chegar ao destino especificado, formando uma estrutura de pilha como na figura \ref{fig:1.2.0/camadas_iot};
+Uma rede IoT pode ser divida em camadas que exercem funções específicas no transporte de dados, de uma forma semelhante a redes de computadores, a camada acima não precisa saber como a inferior funciona, formando uma estrutura de pilha como na figura \ref{fig:1.2.0/camadas_iot}.
 
 \begin{figure}[h!]
 \centering
@@ -50,7 +54,7 @@ Semelhante a camada de rede, a camada de IoT também exerce funções específic
 \label{fig:1.2.0/camadas_iot}
 \end{figure}
 
-A primeira camada é a de aquisição de dados, que lida com o mundo físico e amostra estes dados através de sensores e conversores A/D, também realiza o processamento para entregar em um formato adequado para transmissão e entendível do outro lado, dependo da aplicação. A segunda camada é a camada de transmissão, onde estão, efetivamente, as camadas de rede embutidas. Como o nome já denuncia, ela lida com os aspectos de rede e comunicação para que o dados cheguem as seus destinos. E por último temos a camada de aplicação, a mais abrangente e que envolve maior poder computacional. Ela recebe os dados e lida com os processos de aplicação destes dados, seja análise, visualização, armazenamento ou a estruturação destes.
+A primeira camada é a de aquisição de dados, que lida com o mundo físico e captura estes dados através de sensores e conversores A/D, também realiza o processamento para entregar em um formato adequado para transmissão e inteligível do outro lado, dependo da aplicação. A segunda camada é a camada de transmissão, na qual estão, efetivamente, as camadas de rede embutidas. Como o nome já denuncia, ela lida com os aspectos de rede e comunicação para que o dados cheguem seus destinos. E por último temos a camada de aplicação, a mais abrangente e que envolve maior poder computacional. Ela recebe os dados e lida com os processos de aplicação destes dados, seja análise, visualização, armazenamento ou a estruturação dos mesmos.
 
 \subsection{Aquisição}
 \label{subsection:aquisicao}
@@ -59,12 +63,12 @@ A etapa de aquisição está inserida diretamente no contexto de dados físicos,
 
 \begin{itemize}
 	\item Receber dados de sensores;
-	\item conversão A/D;
-	\item Processamento e calibragem de valores;
+	\item Conversão A/D;
+	\item Processamento de valores;
 	\item Envio de dados em tempo real;
 \end{itemize} 
 
-Para atender essas tarefas, não é necessário grande poder de processamento, microcontroladores ou microprocessadores são capazes de atender tais necessidades se acompanhados de módulos de rede e portas I/O, assim como a implementação do software. Veremos dois exemplos no capítulo de implementação do projeto, que utilizam tanto MCU (Micro-Controller Units) ou Consoles com Sistemas Operacionais leves.
+Para atender essas tarefas, não é necessário grande poder de processamento, microcontroladores ou microprocessadores são capazes de atender aos requisitos necessários para uma grande gama de variáveis físicas, se acompanhados de módulos de rede e portas I/O, assim como a implementação do software. Serão vistos dois exemplos desses dispositivos, que utilizam tanto MCU  e outro um Consoles com Sistemas Operacionais leves.
  
 
 \subsection{Transmissão}
