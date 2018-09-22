@@ -74,37 +74,34 @@ Para atender essas tarefas, não é necessário grande poder de processamento, m
 \subsection{Transmissão}
 \label{subsection:transmicao}
 
-Esta camada é o coração do IoT. A forma de transmissão define quais dispositivos eletrônicos e qual sua especificação técnica necessária para os quesitos de transmissão. Também define como os softwares da camada de aplicação e aquisição devem ser implementados baseado na estrutura da pilha de rede que será usada para transmitir.
+Esta camada é o coração do IoT. A transmissão define quais dispositivos eletrônicos e suas especificação técnicas. Também define como os softwares da camada de aplicação e aquisição devem ser implementados baseado na estrutura da pilha de rede que será usada para transmitir.
 
-Na próxima seção, veremos sobre a camada de rede e suas diversas formas de implementação. É importante que esta camada seja definida da melhor forma a atender sua aplicação, atendendo aspectos: 
+Na próxima seção, a camada de rede e suas formas de implementação serão detalhadas. É importante que esta camada seja definida da melhor forma a atender sua aplicação, alguns aspectos relevantes nesse sentido são:: 
 \begin{itemize}
-\item quantidade de dados transmitido;
-\item número de acessos; 
-\item distância entre dispositivos;
-\item segurança;
+\item Quantidade de dados transmitido;
+\item Número de acessos; 
+\item Distância entre dispositivos;
+\item Segurança;
 \end{itemize}
 
 \subsection{Aplicação}
 \label{subsection:aplicacao}
 
-A camada de aplicação encabeça a pilha do IoT. É ela que de fato trata os dados e realiza as aplicações deste. Ela disponibiliza os dados para o mundo real, podendo exercer múltiplas funções simultâneas incluindo:
+A camada de aplicação encabeça a pilha do IoT. É ela que de fato trata os dados. Ela disponibiliza os dados para o mundo real, podendo exercer múltiplas funções simultâneas incluindo:
 
 \begin{itemize}
-\item Armazenamento e Análise;
-\item Visualização; 
-\item Inteligência e aprendizado;
-\item Serviços e servidores;
-\item Gerenciamento e configuração;
+\item Armazenamento e Análise; Através de Bancos de Dados e Aplicações;
+\item Visualização; Aplicações Web, disponibilizando gráficos e tabelas de dados;
+\item Inteligência e aprendizado; Machine Learning e Estatística para decisões e classificação;
+\item Serviços e servidores; Aplicações em nuvem fornecendo microserviços em aplicações Web;
 \end{itemize}
 
-Nesta camada estão presentes os endpoints apontados pela camada de aquisiçao, o destino dos dados. Bem assim como os servidores que gerenciam os clientes (geralmente implementados na camada de aquisição) e serviços e configurações oferecidos pelo sistema em si.
+Nesta camada estão presentes as pontas apontados pela camada de aquisição, assim como os servidores que gerenciam os clientes (geralmente implementados na camada de aquisição) e serviços e configurações oferecidos pelo sistema em si.
 
-\section{Camadas de Rede}
+\section{Redes de Computadores}
 \label{section:camadas_de_rede}
 
-Como visto anteriormente, a camada de transmissão basicamente define a infraestrutura do sistema. Ela é construído com as camadas de rede como base. Portanto definir as camadas de rede e seus protocolos é definir a camada de transmissão em si.
-
-Redes de computadores são complexas com diferentes aspectos a se preocupar. Dividir em camadas permite modularizar a implementação da rede, de modo que cada camada tenha uma tarefa na estrutura de comunicação dos aspectos físicos ao software. Como a camada de cima não precisa saber sobre os detalhes e especificações da camada de baixo, as mudanças de uma parte do sistema é transparente para o resto do sistema. Existem diversas formas de implementação de camadas, mas todas se baseiam em um modelo de referência, o modelo OSI \cite{Zimmermann:1988:ORM:59309.59310}.
+Como visto anteriormente, a camada de transmissão basicamente define a infraestrutura do sistema. Ela é construída baseada em como a rede é implementada. Redes de computadores são complexas com diferentes aspectos a se preocupar. Dividir em camadas permite modularizar a implementação da rede, de modo que cada camada tenha uma tarefa na estrutura de comunicação dos aspectos físicos ao software. Como uma camada  não precisa saber os detalhes e especificações da camada logo abaixo. Existem diversas formas de implementação de camadas, mas todas se baseiam em um modelo de referência, o modelo OSI \cite{Zimmermann:1988:ORM:59309.59310}.
 
 
 \begin{figure}[h!]
@@ -114,7 +111,7 @@ Redes de computadores são complexas com diferentes aspectos a se preocupar. Div
 \label{fig:1.2.0/modelo_osi_tcpip}
 \end{figure}
 
-Baseado no modelo OSI. Temos o modelo TCP/IP \cite{TCPIP}, visualizado em \ref{fig:1.2.0/modelo_osi_tcpip} e utilizado na internet e base para protocolos de aplicação muito utilizados como HTTP, WebSocket e MQTT. Em ambos cada camada exerce uma tarefa com seu respectivo protocolo, como resumido na tabela \ref{table:1.2.0}.
+Baseado no modelo OSI, temos o modelo TCP/IP \cite{TCPIP}, visualizado na \ref{fig:1.2.0/modelo_osi_tcpip} e utilizado na internet e base para protocolos de aplicação muito utilizados como HTTP, WebSocket e MQTT. Em ambos cada camada exerce uma tarefa com seu respectivo protocolo. O protocolo define regras e convenções para a comunicação entre dispositivos em rede. A \ref{table:1.2.0} resume os detalhes de cada camada.
 
 \begin{table}[h]
 \centering
@@ -124,15 +121,15 @@ Baseado no modelo OSI. Temos o modelo TCP/IP \cite{TCPIP}, visualizado em \ref{f
 \multicolumn{1}{|c|}{CAMADA} & \multicolumn{1}{c|}{DETALHES}                                                  \\ \hline
 7 - Aplicação                & Define instruções específicas da aplicação          						    \\ \hline
 6 - Apresentação             & Formatação dos dados, conversão dos dados                     					\\ \hline
-5 - Sessão                   & Negociação e conexão com outros nós, analogia                                \\ \hline
-4 - Transporte               & Oferece métodos para a entrega de end-to-end                        			\\ \hline
-3 - Rede                     & Roteamento de pacotes em uma ou várias redes                                 \\ \hline
-2 - Enlace                   & Detecção de erros;                                                            \\ \hline
+5 - Sessão                   & Negociação e conexão com outros nós.                                \\ \hline
+4 - Transporte               & Oferece métodos para a entrega de ponta-a-ponta                        			\\ \hline
+3 - Rede                     & Roteamento e endereçamento de pacotes em uma ou várias redes                                 \\ \hline
+2 - Enlace                   & Detecção de erros, transmissão e recepção de quadros e controle de fluxo.                                                          \\ \hline
 1 - Física                   & Aspectos físicos da transmissão \\ \hline
 \end{tabular}
 \label{table:1.2.0}
 \end{table}
 
 
-O foco desta literatura está na camada de aplicação e suas funcionalidades. Apesar de diferentes tecnologias utilizarem diferentes camadas abaixo, serão especificas características de protocolos construídos em cima do TCP/IP, por seu uso na Internet e redes industriais, e que sejam eficientes em trocas de mensagens em tempo real.
+O projeto lidará com aspectos e protocolos da camada de Aplicação. Apesar de diferentes tecnologias utilizarem diferentes camadas abaixo, serão especificas características de protocolos construídos sobre o TCP/IP, por seu uso na internet e redes industriais, e que sejam eficientes em trocas de mensagens em tempo real.
 
