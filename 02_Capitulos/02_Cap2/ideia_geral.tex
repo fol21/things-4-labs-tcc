@@ -51,10 +51,10 @@ Na próxima seção, a camada de rede e suas formas de implementação serão de
 A camada de aplicação encabeça a pilha do IoT. É ela que de fato trata os dados. Ela disponibiliza os dados para o mundo real, podendo exercer múltiplas funções simultâneas incluindo:
 
 \begin{itemize}
-\item Armazenamento e Análise; Através de Bancos de Dados e Aplicações;
+\item Armazenamento e Análise, através de Bancos de Dados e Serviços;
 \item Visualização; Aplicações Web, disponibilizando gráficos e tabelas de dados;
-\item Inteligência e aprendizado; Machine Learning e Estatística para decisões e classificação;
-\item Serviços e servidores; Aplicações em nuvem fornecendo microserviços em aplicações Web;
+\item Inteligência e aprendizado, com Machine Learning e Estatística para decisões e classificação;
+\item Serviços e servidores . Aplicações em nuvem fornecendo micro-serviços em aplicações Web;
 \end{itemize}
 
 Nesta camada estão presentes as pontas apontados pela camada de aquisição, assim como os servidores que gerenciam os clientes (geralmente implementados na camada de aquisição) e serviços e configurações oferecidos pelo sistema em si.
@@ -107,7 +107,7 @@ As tecnologias mais comuns de se encontrar em aplicações IoT, os protocolos co
 
 O protocolo mais simples seria o HTTP, altamente usado na internet, porém não é eficiente no consumo de energia por abrir uma conexão a cada envio de dados. Para minimizar estas desvantagens, foi desenvolvido o CoAP (Constrained Application Protocol) \cite{coap} protocolo nos mesmos moldes do HTTP com arquitetura REST (Representational State Transfer), que define as regras para criação de uma serviços Web, garantindo interoperabilidade entre sistemas e a Internet. Entretanto o CoAP é mais simples, mais leve, com baixo overhead e utilizado em redes locais.
 
-Mas os mais utilizados em aplicações são sem dúvidas os protocolos que mantém conexão aberta, em especial Websocket e MQTT, sendo o primeiro mais utilizado para chats e mensagens, enquanto o segundo domina o mundo do M2M e Telemetria.
+Mas os mais utilizados em aplicações são sem dúvidas os protocolos que mantém conexão aberta, em especial Websockets \cite{websocket} e MQTT, sendo o primeiro mais utilizado para chats e mensagens, enquanto o segundo domina o mundo do M2M e Telemetria.
 
 
 \section{Arquiteturas de Protocolos}
@@ -115,12 +115,12 @@ Mas os mais utilizados em aplicações são sem dúvidas os protocolos que mant�
 
 
 %%% MQTT , Websocket e HTTP %%%
-Existem protocolos de aplicação que podem ser facilmente mapeados por esse tipo de interface. Alguns já são cosntruídos no modelo Publish/Subscribe, outros em modelos parecidos. Para critérios de comparação, apresentam-se dois protocolos de aplicação, MQTT e WebSockets \cite{websocket}. O protocolo MQTT, no qual será implementado nesse projeto, foi moldado no padrão citado, enquanto o WebSockets é orientado a eventos. Ambos enviam mensagens em tempo real através de um servidor que controla o fluxo de mensagens da aplicação.
+Existem protocolos de aplicação que podem ser facilmente mapeados por esse tipo de interface. Alguns já são construídos no modelo Publish/Subscribe, outros em modelos parecidos. Para critérios de comparação, apresentam-se dois protocolos de aplicação, MQTT e HTTP . 
 
 \subsection{MQTT X HTTP}
 \label{subsection:mqttxhttp}
 
-Na questão de desempenho, estes protocolos se mostram mais eficientes dentre os construídos sobre TCP/IP, comparado, por exemplo, com o HTTP, protocolo de rede mais recorrente em redes locais e na internet. Como mostrado em \cite{Tetsuya-Sasaki} e \cite{Naik}, HTTP, por sua natureza de abrir e fechar conexão a cada requisição de dados e seu cabeçalho ilustrado na \ref{fig:3.2.0/http-flow}, requer mais banda e consome mais energia que protocolos leves e de conexão persistente como o MQTT. O que faz sua escolha remota para a aplicação deste projeto.
+MQTT E HTTP são protocolos de aplicação construídos sobre TCP/IP.  HTTP é o protocolo de rede mais recorrente em redes locais e na Internet. Como mostrado em \cite{Tetsuya-Sasaki} e \cite{Naik}, HTTP, por sua natureza de abrir e fechar conexão a cada requisição de dados e seu cabeçalho, como ilustrado na \ref{fig:3.2.0/http-flow}, requer mais banda e consome mais energia que protocolos leves e de conexão persistente como o MQTT. Logo, com uma breve avaliação, é possível perceber que o HTTP não é o protocolo de aplicação mais eficiente para a aplicação deste projeto.
 
 \begin{figure}[h]
 \centering
@@ -129,7 +129,7 @@ Na questão de desempenho, estes protocolos se mostram mais eficientes dentre os
 \label{fig:3.2.0/http-flow}
 \end{figure}
 
-Já o MQTT é um protocolo de cabeçalhos menores, conexão persistente e menos passos para o envio de mensagem, como visto na \ref{fig:3.2.0/mqtt-flow}, por ser um protocolo feito com o objetivo de reduzir a latência, levando vantagem para a transmissão contínua de dados, em relação ao HTTP.
+MQTT é um protocolo com cabeçalhos menores, conexão persistente e menos passos para o envio de mensagem, como visto na \ref{fig:3.2.0/mqtt-flow}. Por ser um protocolo feito com o objetivo de reduzir a latência, leva vantagem para a transmissão contínua de dados  em relação ao HTTP.
 
 \begin{figure}[h]
 \centering
@@ -170,9 +170,9 @@ Para gerenciar os clients (responsáveis pela implementação da comunicação M
 \section{Publishers e Subscribers}
 \label{section:publishers_subscribers}
 
-Para enviar e receber dados de uma forma a atender os requisitos da seção \ref{section:interface}, foi utilizado um padrão de comunicação recorrente em aplicações contemporâneas, o padrão Publish/Subscriber \cite{amazon:pub-sub}.
+Para enviar e receber dados de uma forma a atender os requisitos da seção \ref{section:interface_iot}, foi utilizado um padrão de comunicação recorrente em aplicações contemporâneas, o padrão Publish/Subscriber \cite{amazon:pub-sub}.
 
-O padrão Publish/Subscribe permite que as mensagens sejam transmitidas assíncronas e para vários dispositivos simultaneamente. Para transmitir uma mensagem, um client pode simplesmente enviar uma mensagem para o tópico que os envia imediatamente para todos os subscribers. Todos os componentes que se inscreverem no tópico receberão todas as mensagens transmitidas, a menos que uma política de filtragem de mensagens seja definida pelo assinante.
+O padrão Publish/Subscribe permite que as mensagens sejam transmitidas assíncronas e para vários dispositivos simultaneamente. Para transmitir uma mensagem, um cliente pode simplesmente enviar uma mensagem para um determinado tópico. Todos os componentes que se inscreverem no tópico receberão todas as mensagens transmitidas, a menos que uma política de filtragem de mensagens seja definida pelo assinante do tópico.
 
 \begin{figure}[h!]
 \centering
@@ -181,15 +181,12 @@ O padrão Publish/Subscribe permite que as mensagens sejam transmitidas assíncr
 \label{fig:3.2.0/aws_pub_sub}
 \end{figure}
 
-Qualquer mensagem publicada em um tópico é imediatamente recebida por todos os subscribers do tópico. As mensagens de podem ser usadas para arquiteturas orientadas a eventos ou para desacoplar aplicativos, aumentando  o desempenho, a confiabilidade e a escalabilidade. Com isso, foram criados duas funções possíveis para cada dispositivo dentro deste padrão, os Publishers e os Subscribers, sua comunicação é descrita em \ref{fig:3.2.0/pub_sub}.
+Qualquer mensagem publicada em um tópico é imediatamente recebida por todos os assinantes deste tópico. Com isso, foram criados duas funções possíveis para cada dispositivo dentro deste padrão, os Publishers, quem enviará as mensagens de dados e os Subscribers, quem receberá. Sua comunicação é ilustrada na \ref{fig:3.2.0/pub_sub}.
 
 \subsubsection{Broker}
 \label{subsubsection:broker}
 
-O Broker é o servidor do padrão Publish/Subscribe, ele efetivamente executa as ordens de publicação (publish) feita por algum cliente para os tópicos que outros clientes estão inscritos (subscribed), possui todas as listas de tópicos, é orientado a conexão e não persiste informações dos clientes, ou seja, em caso de queda de conexão, estes devem se inscrever novamente nos tópicos.
-
-\textit{Nota: A arquitetura Broker não é exclusividade do MQTT, outros protocolos utilizam esse tipo de implementação em servidores.}
-
+O Broker é o servidor do padrão Publish/Subscribe, ele efetivamente executa as ordens de publicação (publish) feita por algum cliente para os tópicos que outros clientes estão inscritos (subscribed), possui todas as listas de tópicos, é orientado a conexão e não persiste informações dos clientes, ou seja, em caso de queda de conexão, estes devem se inscrever novamente nos tópicos.  A arquitetura Broker não é exclusividade do MQTT, outros protocolos utilizam esse tipo de implementação em servidores em arquiteturas semelhantes de envio de mensagem.
 
 \begin{figure}[h]
 \centering
@@ -198,18 +195,18 @@ O Broker é o servidor do padrão Publish/Subscribe, ele efetivamente executa as
 \label{fig:3.2.0/broker_pub_sub}
 \end{figure}
 
-Na figura \ref{fig:3.2.0/broker_pub_sub}, o Broker armazena os tópicos e os ids de conexão dos clientes, 2 estava inscrito para ouvir as mensagens do tópico \textit{topic}, enquanto 3 enviava uma ordem de inscrição em \textit{another\_topic}, 1 envia ordem de publicação para \textit{topic}.
+Na figura \ref{fig:3.2.0/broker_pub_sub}, o Broker armazena os tópicos e os Ids de conexão dos clientes, 2 estava inscrito para ouvir as mensagens do tópico \textit{topic}, enquanto 3 enviava uma ordem de inscrição em \textit{another\_topic}, 1 envia ordem de publicação para \textit{topic}.
 
 
 \subsubsection{Tipos de MQTT}
 \label{subsubsection:tipos_mqtt}
 
 %% Tipos de MQTT 
-Com a evolução e o uso do protocolo, foram necessárias atualizações que contemplam funcionalidades que atendem  requisitos essenciais para aplicações da indústria. Como atender dispositivos que não usam a pilha TCP/IP e medidas de segurança (que serão melhor debatidas á frente). 
+Com a evolução e o uso do protocolo, foram necessárias atualizações que contemplam funcionalidades que atendem  requisitos essenciais para aplicações da indústria. Como atender dispositivos que não usam a pilha TCP/IP e medidas de segurança da informação nas mensagens enviadas. 
 
 Existe uma gama de dispositivos que utilizam protocolos específicos, geralmente leves, para redes locais e leves para o transporte de dado, a exemplo do ZigBee \cite{zigbee}. Para isso foi criada uma versão do MQTT para atender estes tipos de protocolos, substituindo a base TCP/IP por outros protocolos destas camadas, mantendo a camada de aplicação e o padrão Publish/Subscribe.
 
-Para resolver questões de segurança, foi criada uma variação do MQTT que adiciona camadas deste quesito ao protocolo de aplicação. Assim como o HTTPS o protocolo MQTTS é construído em cima do protocolo SSL/TLS (explicado em \ref{subsection:seguranca}), camada de segurança que também usa como base TCP/IP. Esta camada envolve o processo de encriptação dos cabeçalhos da aplicação e autenticação por passagem de certificados.
+Para resolver questões de segurança, foi criada uma variação do MQTT que adiciona camadas deste quesito ao protocolo de aplicação. Assim como o HTTPS o protocolo MQTTS é construído em cima do protocolo SSL/TLS (descritos em \ref{section:seguranca}), camada de segurança que também é cosntruída sobre TCP/IP. Esta camada envolve o processo de encriptação dos cabeçalhos da aplicação e autenticação por passagem de certificados.
 
 \section{Segurança de aplicações}
 \label{section:seguranca}
@@ -227,7 +224,7 @@ A chave pública não precisa ser secreta e é colocada em uma solicitação de 
 
 Além do SSL existem outras formas de segurança. A maioria envolve encriptação. Como o uso de algoritmos de hash para encriptar as mensagens enviadas, ficando a cargo da aplicação desencriptar.
 
-A Interface aqui construída é transparente ao SSL, ou seja, pode ser implementada em cima ou não deste protocolo, os exemplos são feitos sem esta camada, porém basta criar ou adquirir um certificado em uma autoridade de certificação e gerar as chaves. As APIs usadas contemplam da opção de usarem clients SSL.
+A Interface construída neste projeto é transparente ao SSL, ou seja, pode ser implementada em cima ou não deste protocolo, os exemplos são feitos sem esta camada, porém basta criar ou adquirir um certificado em uma autoridade de certificação e gerar as chaves. As APIs usadas contemplam da opção de usarem clients SSL.
 
 
 \section{Persistência de dados}
@@ -238,7 +235,7 @@ Os dados adquiridos pela plataforma e suas camadas, são armazenados em memória
 
 Essa persistência é implementada com Banco de Dados, estruturas que organizam o armazenamento de dados persistentes em arquivos. Um Banco de dados é uma basicamente uma aplicação, um serviço do sistema que recebe requisições de rede e escreve ou lê dados em um arquivo. Existem inúmeras formas de implementação e protocolos de comunicação para Bancos de Dados. Porém todos eles seguem abstrações em comum.
 
-Um banco é composto por duas ferramentas. O Motor e o Arquivo de dados. O motor é quem realiza as ações sobre o arquivo, é o sistema de gerenciamento. Recebe as requisições e aplica algoritmos de escrita de dados eficientes no arquivo para armazenar os dados em uma estrutura definida. Um Banco de dados pode possuir vários motores, cada um com algum algoritmo que varia a eficiência e o tempo de escrita e/ou leitura dependendo do dado recebido.
+Um banco é composto por duas ferramentas, o Motor e o Arquivo de dados. O motor é quem realiza as ações sobre o arquivo, é o sistema de gerenciamento. Recebe as requisições e aplica algoritmos de escrita de dados eficientes no arquivo para armazenar os dados em uma estrutura definida. Um Banco de dados pode possuir vários motores, cada um com algum algoritmo que varia a eficiência e o tempo de escrita e/ou leitura dependendo do dado recebido.
 
 \begin{figure}[h!]
 \centering
@@ -247,16 +244,16 @@ Um banco é composto por duas ferramentas. O Motor e o Arquivo de dados. O motor
 \label{fig:3.3.5/database_arch}
 \end{figure}
 
-O Arquivo é o documento onde os dados são armazenados, na estrutura definida. Possuem formatações de dados específicas de cada tipo de banco, seguindo uma abstração. O formato do armazenamento de dados, define e limita eficiência do motor, então e necessário a escolha adequada de algoritmo para uma maior eficiência da leitura do arquivo. Como em \ref{fig:3.3.5/database_arch} a aplicação envia uma solicitação de criação ou leitura ou atualização ou remoção (CRUD - Create, Read, Update, Delete) e o motor lida com os dados, armazenando-os em uma determinada estrutura no Arquivo.
+O Arquivo é o documento onde os dados são armazenados, na estrutura definida. Possuem formatações de dados específicas de cada tipo de banco. A forma de armazenamento de dados, define e limita eficiência do motor em buscar e escrever dados, então e necessário a escolha adequada de algoritmo para uma maior eficiência da leitura do arquivo. Como em \ref{fig:3.3.5/database_arch} a aplicação envia uma solicitação de criação, leitura, atualização ou remoção (CRUD - Create, Read, Update, Delete) e o motor armazena em uma determinada estrutura de dados no Arquivo.
 
 
  
 \section{Bancos para Aplicações IoT}
 \label{section:bancos_IoT}
 
-Na área de Bancos de Dados (ou DBs), com escopo focado em IoT, há um porém. Para a estruturação de uma aplicação eficiente, não se deve usar qualquer tipo de banco. Devem-se escolher motores e estruturas de bancos adequadas para a aplicação. Não exite um critério definitivo que guia o desenvolvedor para melhor escolha. Mas algumas características de bancos de dados podem ser exploradas em aplicações IoT, formando um DB eficiente para tal.
+Na área de Bancos de Dados, com escopo focado em IoT, há um porém. Para a estruturação de uma aplicação eficiente, não se deve usar qualquer tipo de banco. Devem-se escolher motores e estruturas de bancos adequadas para a aplicação. Não exite um critério definitivo que guia o desenvolvedor para melhor escolha. Mas algumas características de bancos de dados podem ser exploradas em aplicações IoT.
 
-Como pode ser observado em \cite{Damodaran}, uma aplicação eficiente de Bancos e IoT está ligada ao tempo de inserção de dados no banco,  o tempo total em que a aplicação leva para enviar, aplicar a busca de onde o dado deve ser inserido no documento e de fato armazenar, podem ser feitas várias inserções de pequenos pacotes de dados, dependendo do tamanho da mensagem. Esta característica está ligada ao motor do banco, que determina como o dado será armazenado, e quanto ele leva para escrever o dado no documento. A maioria dos dados são armazenados em estruturas B+Trees \cite{b-tree}, porém pode-se observar em \cite{Damodaran} que a estrutura LSM Tree \cite{O'Neal-Gawlick-Cheng} possui maior eficiência na escrita.
+Como pode ser observado em \cite{Damodaran}, uma aplicação eficiente de Bancos e IoT está ligada ao tempo de inserção de dados no banco,  o tempo total em que a aplicação leva para enviar, aplicar a busca de onde o dado deve ser inserido no documento e de fato armazenar, podem ser feitas várias inserções de pequenos pacotes de dados, dependendo do tamanho da mensagem. Esta característica está ligada ao motor do banco, que determina como o dado será armazenado, e quanto ele leva para escrever o dado no documento. A maioria dos dados são armazenados em estruturas de árvore B+ \cite{b-tree}, porém pode-se observar em \cite{Damodaran} que a estrutura de árvore LSM  \cite{O'Neal-Gawlick-Cheng} possui maior eficiência na escrita.
 
 
 \begin{figure}[h!]
@@ -268,11 +265,11 @@ Como pode ser observado em \cite{Damodaran}, uma aplicação eficiente de Bancos
 
 Comparando as duas estruturas, como mostrado em \ref{fig:3.3.5/b-lsm}, percebe-se que a estrutura LSM sustenta até 2x mais inserções da estrutura B+, hoje os Bancos de Dados modernos utilizam desta vantagem, devida a nova tendência de aplicações de coletar dados constantemente, o que leva a operação de escrita no banco ter mais importância e ocorrências que a leitura e explica a migração para a estrutura LSM.
 
-Existem várias abstrações de Bancos de dados. Em \cite{Rautmare-Bhalerao} compara-se e conclui-se que o banco MongoDB, um banco NoSQL possui um tempo de resposta de inserção menor que o MySQL (bancos relacionais), porém o último é mais estável. De fato bancos NoSQL são, em geral, mais leves, possui uma flexibilidade maior para lidar e estruturar dados, o que fazem estes tipos de Banco mais favoráveis a aplicações de IoT. Porém outras estruturas como um banco divido em timescale mostram-se eficientes SQL ou não.
+Existem várias abstrações de Bancos de dados. Em \cite{Rautmare-Bhalerao} compara-se e conclui-se que o banco MongoDB, um banco NoSQL possui um tempo de resposta de inserção menor que o MySQL (bancos relacionais), porém o último é mais estável. De fato bancos NoSQL (bancos não-relacionais) são, em geral, mais leves e possuem uma flexibilidade maior para lidar e estruturar dados, o que fazem estes tipos de Banco mais favoráveis a aplicações de IoT, porém outras estruturas como um banco divido em timescale mostram-se eficientes com bancos relacionais ou não.
 
 Outros aspectos podem contribuir para a eficiência de persistência de dados. Criar bancos locais diminuem a latência e a necessecidade de conexão, aumentando a capacidade de inserção de dados, além de ser uma forma de backup de dados. Um banco local, geralmente fica em uma plataforma como em \cite{Paethong-Sato-Namiki}, são bancos leves em aplicações de baixo consumo, devido a capacidade de processamento limitada. Seu papel é geralmente para armazenar os dados quando não há conexão, e quando esta é restabelecida os dados são enviados para um banco remoto com mais capacidade de processamento e aplicações. %% Falar sobre bancos locais.
 
-Dentre os bancos estudados, alguns se destacam como o Cassandra, usado pela Netflix para coletar dados sobre o comportamento do usuário na plataforma ou o InfluxDB, um banco de arquitetura TimeScale, feito para aplicações em tempo real. Mas para esse projeto, foi utilizado o MongoDB \cite{mongodb}, um banco NoSQL, leve, de facil integração com as plataformas utilizadas e que posui implementações de motores que priorizam a eficiência na escrita de dados, como a LSM tree.
+Dentre os bancos estudados, alguns se destacam como o Cassandra, usado pela Netflix para coletar dados sobre o comportamento do usuário na plataforma ou o InfluxDB, um banco de arquitetura TimeScale, feito para aplicações em tempo real. Mas para esse projeto, foi utilizado o MongoDB \cite{mongodb}, um banco NoSQL, leve, de facil integração com as plataformas utilizadas e que possui implementações de motores que priorizam a eficiência na escrita de dados, como a LSM tree.
 
 
 
