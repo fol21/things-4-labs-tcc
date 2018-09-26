@@ -113,7 +113,7 @@ Além disso Node.js é uma ferramenta multiplataforma, com distribuições para 
 Na seção anterior foi discutido a implementação em Hardware do sistema e as diferenças das tecnologias contempladas. Sistemas embarcados 
 possuem muito menos opções de implementação que um console gerido por um sistema operacional, sendo uma das principais o paralelismo de processos, a capacidade de ser multi-tarefas, por isso exigiu-se duas filosofias diferentes de implementação do sistema para os dois tipos de plataformas.
 
-\subsection{Embarcados Síncronos}
+\subsection{Arquitetura síncrona em embarcados}
 \label{subsection:embarcados_sinc}
 
 Sistemas embarcados possuem um poder de processamento limitado, apesar da tendência de elevar este poder na ponta, estes sistemas são geralmente Microcontrolados. Microcontroladores possuem arquiteturas mais simples, geralmente executando instruções de um programa compilado para linguagem do MCU e gravado neste. Não há paralelismo, cada instrução é síncrona, ou seja são executadas uma a uma, a próxima deve esperar a anterior acabar de ser executada pela unidade de processamento.
@@ -136,7 +136,7 @@ A \ref{fig:sinc-implementation} simplifica a lógica da implementação em dispo
 
 Quando o estado está em READY, a aplicação está pronto para processar mensagens recebidas e publicar, lembrando que está é uma lógica básica, o desenvolvedor pode adicionar outros passos, mas a verificações de estado e as configurações do Publisher são obrigatórias para o funcionamento do Sistema. Repare que toda a lógica é sequencial, síncrona, não há paralelismo na rotina.
 
-\subsection{Consoles Assíncronos}
+\subsection{Processos assíncronos em console}
 \label{subsection:consoles_assinc}
 
 Consoles são dispositivos que possuem uma Arquitetura mais complexa, consequentemente mais poder de processamento. Ilustrado na  \ref{fig:3.3.4/os-diagram}, a presença de um sistema operacional gerenciando processos do sistema e de aplicações e informações do Hardware permitem a execução de múltiplas tarefas em paralelo, o que caracteriza processos Assíncronos. A linguagem utilizada para a implementação foi Javascript com o ambiente Node.js, um interpretador da linguagem que pode ser usado fora de um Brownser. Node possui uma gama de suportes para a implementação de funções assíncronas, permitindo o sistema a explorar essa característica e, diferentemente dos embarcados microcontrolados, executar Threads em paralelo, como receber e enviar mensagens em paralelo simultaneamente.
@@ -154,7 +154,7 @@ A \ref{fig:async-implementation} mostra o funcionamento simplificado das aplica�
 \section{Indexação de dados e Timestamp}
 \label{section:timestamp}
 
-Na seção \ref{section:bancos_IoT} foram discutidos estruturas da organização de dados e o formato de armazenamento de dados como o formato de Documento e TimeScale. É importante que estes formatos tenham formas eficientes de indexação, de modo a facilitar a busca e a análise de dados.
+Na seção \ref{section:bancos_IoT} foram discutidos estruturas da organização de dados e o formato de armazenamento de dados como o formato de Documento e séries de tempo. É importante que estes formatos tenham formas eficientes de indexação, de modo a facilitar a busca e a análise de dados.
 
 Em uma aplicação de IoT, que envolve coleta de dados em tempo real, é fundamental, independentemente do formato escolhido, a informação de quando este dado foi colhido (data e hora). Isto permite a análise dos dados ao longo do , conforme forem armazenados. Aplicações de decisão e análise utilizam ferramentas estatística com base nas ocorrências temporais, projetando previsões e classificação. No projeto atual, foi implementado o MongoDB um banco de dados de documentos. Cada documento é indexado por uma identificação única como mostrado na \ref{fig:document-model}, permitindo também criar relações entre documentos.
 
