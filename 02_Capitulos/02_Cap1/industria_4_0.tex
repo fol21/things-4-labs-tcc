@@ -1,11 +1,13 @@
-\chapter{Introdução ao Projeto}
+\chapter{Motivação e Visão geral do trabalho}
 \label{chapter:intro}
 
 O cenário atual do desenvolvimento tecnológico encontra-se no meio de uma quarta revolução industrial. Nunca se produziu tantos dados e se utilizaram redes como a própria internet para propaga-los. É de se esperar que tanto a academia e diferentes mercados demandem inovações para o compartilhamento desses dados em tempo real ou próximo disso, aquecendo setores de transporte, análise e inteligência de dados.
 
-Este projeto propõe uma interface para comunicação entre as diferentes tecnologias e camadas de rede, de forma que o desenvolvedor só se preocupe em  implementar e configurar uma interface para mapear a melhor opção de ferramentas para a aplicação. O projeto lida com protocolos baseados sobre o TCP/IP, uma unanimidade em redes conectadas a internet. Podendo se estender para outras protocolos de aplicações de escopo fechado. O foco está no protocolo de aplicação MQTT (\textit{Message Queuing Telemetry Transport}) \cite{mqtt}, um protocolo que opera sobre o TCP/IP, leve e extremamente utilizado para compartilhamento  de dados telemétricos e de mensagens. Ele oferece uma API para aquisição, transmissão, recepção e armazenamento de dados telemétricos.
+A Internet das Coisas é a rede que permite a conexão e compartilhamento de dados  de dispositivos físicos . Ela é derivada de métodos de comunicação entre máquinas e telemetria. Pode ser dissecada em três camadas de aquisição, comunicação e aplicação  podendo ser implementada utilizando diversos protocolos de comunicação, dependendo da tecnologia disponível. É importante que sistemas IoT sejam projetados de forma a atender a aplicação eficientemente, porém tal tarefa não é fácil nem simples. O trabalho propõe um sistema que permite facilitar tal tarefa.
 
-A Internet das Coisas é a rede que permite a conexão e compartilhamento de dados  de dispositivos físicos . Ela é derivada de métodos de comunicação entre máquinas e telemetria. Pode ser dissecada em três camadas de aquisição, comunicação e aplicação  podendo ser implementada utilizando diversos protocolos de comunicação, dependendo da tecnologia disponível. É importante que sistemas IoT sejam projetados de forma a atender a aplicação eficientemente, porém tal tarefa não é fácil nem simples. Este projeto oferece uma interface que permite facilitar tal tarefa.
+Este projeto propõe uma interface para comunicação entre as diferentes tecnologias e protocolos de aplicação em redes, de forma que o desenvolvedor só se preocupe em  implementar e configurar uma interface para mapear a melhor opção de ferramentas para a aplicação. O projeto lida com protocolos baseados sobre o TCP/IP, uma unanimidade em redes conectadas a internet. Podendo se estender para outras protocolos de aplicações de escopo fechado. O foco está no protocolo de aplicação MQTT (\textit{Message Queuing Telemetry Transport}) \cite{mqtt}, um protocolo que opera sobre o TCP/IP, leve e extremamente utilizado para compartilhamento  de dados telemétricos e de mensagens. Ele oferece uma API para aquisição, transmissão, recepção e armazenamento de dados telemétricos.
+
+.
 
 \section{Internet das Coisas}
 \label{section:iot}
@@ -47,7 +49,7 @@ Inicialmente, os conceitos e ideias do projeto eram voltados a desenvolver uma i
 \section{Interface para Protocolos de Aplicação}
 \label{section:interface_iot}
 
-Neste projeto será visto a implementação de uma interface entre o desenvolvedor e  o protocolo MQTT, implementando o conceito de canais de dados, entretanto a idéia é estender o interfaceamento com outros protocolos de aplicação com características favoráveis para uma rede IoT, como mostrado na \ref{fig:2.2.0/camada_abatracao}.  Algumas destas características fundamentais podem ser destacadas:
+Neste projeto será visto a implementação de uma interface entre o desenvolvedor e  o protocolo MQTT, implementando o conceito de canais de dados, entretanto a idéia é estender o interfaceamento com outros protocolos de aplicação com características favoráveis para uma rede IoT, como mostrado na \ref{fig:2.2.0/camada_abatracao}.  Algumas destas características podem ser destacadas:
 
 \begin{itemize}
 

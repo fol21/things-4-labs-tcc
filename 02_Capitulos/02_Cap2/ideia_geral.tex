@@ -42,12 +42,15 @@ Os protocolos construídos com base no TCP/IP são vastamente utilizados e possu
 
 O protocolo mais simples seria o HTTP, altamente usado na internet, porém não é eficiente no consumo de energia por abrir uma conexão a cada envio de dados. Para minimizar estas desvantagens, foi desenvolvido o CoAP (Constrained Application Protocol) \cite{coap} protocolo nos mesmos moldes do HTTP com arquitetura REST (Representational State Transfer), que define as regras para criação de uma serviços Web, garantindo interoperabilidade entre sistemas e a Internet. Entretanto o CoAP é mais simples, mais leve, com baixo overhead em relação ao HTTP e utilizado em redes locais.
 
-\section{Arquiteturas de Protocolos}
-\label{section:arquitetura_protocolo}
-
-
 %%% MQTT , Websocket e HTTP %%%
 A interface proposta nesse projeto propõe a arquitetura Publish/Subscribe e se comunicará com Protocolos de aplicações, mesmo que estes não estejam baseados neste tipo de arquitetura . Para critérios de comparação apresenta-se dois protocolos de aplicação construídos sobre o TCP/IP, HTTP e MQTT.
+
+\section{MQTT}
+\label{section:mqtt}
+
+O protocolo MQTT foi escolhido por ser leve e ideal para aplicações em tempo real com vários dispositivos simultaneamente. É um protocolo no padrão Publish/Subscribe, ideal para definir a função de cada dispositivo seja enviando dados (Publish) ou recebendo-os (Subscribe).
+
+Para gerenciar os clientes (responsáveis pela implementação da comunicação MQTT) em cada dispositivo é necessário um servidor chamado Broker. Este foi implementado com o Mosquitto \cite{mosquitto}, um broker open source, leve capaz e de ser instalado localmente e no servidor do laboratório para testes remotos.
 
 \subsection{MQTT X HTTP}
 \label{subsection:mqttxhttp}
@@ -63,9 +66,9 @@ MQTT e HTTP são protocolos de aplicação construídos sobre TCP/IP.  HTTP é o
 
 MQTT é um protocolo com cabeçalhos menores, conexão persistente e menos passos para o envio de mensagem, como visto na \ref{fig:3.2.0/mqtt-flow}. Por ser um protocolo feito com o objetivo de reduzir a latência, leva vantagem para a transmissão contínua de dados  em relação ao HTTP.
 
-\begin{figure}[h]
+\begin{figure}[h!]
 \centering
-\includegraphics[width=8cm]{./02_Capitulos/02_Cap3/figures/mqtt-flow}
+\includegraphics[width=10cm]{./02_Capitulos/02_Cap3/figures/mqtt-flow}
 \caption{Fluxo da conexão do MQTT}
 \label{fig:3.2.0/mqtt-flow}
 \end{figure}
@@ -91,14 +94,6 @@ Abaixo na \ref{tabela:mqttxhttp} encontra-se o resumo comparativo entre os proto
 \end{table}
 
 
-
-\section{MQTT}
-\label{section:mqtt}
-
-O protocolo MQTT foi escolhido por ser leve e ideal para aplicações em tempo real com vários dispositivos simultaneamente. É um protocolo no padrão Publish/Subscribe, ideal para definir a função de cada dispositivo seja enviando dados (Publish) ou recebendo-os (Subscribe).
-
-Para gerenciar os clientes (responsáveis pela implementação da comunicação MQTT) em cada dispositivo é necessário um servidor chamado Broker. Este foi implementado com o Mosquitto \cite{mosquitto}, um broker open source, leve capaz e de ser instalado localmente e no servidor do laboratório para testes remotos.
-
 \subsection{Publishers e Subscribers}
 \label{subsection:publishers_subscribers}
 
@@ -113,7 +108,7 @@ O padrão Publish/Subscribe permite que as mensagens sejam transmitidas assíncr
 \label{fig:3.2.0/aws_pub_sub}
 \end{figure}
 
-Qualquer mensagem publicada em um tópico é imediatamente recebida por todos os assinantes deste tópico. Com isso, foram criados duas funções possíveis para cada dispositivo dentro deste padrão, os Publishers, quem enviará as mensagens de dados e os Subscribers, quem receberá. Sua comunicação é ilustrada na \ref{fig:3.2.0/pub_sub}.
+Qualquer mensagem publicada em um tópico é imediatamente recebida por todos os assinantes deste tópico. Com isso, foram criados duas funções possíveis para cada dispositivo dentro deste padrão, os Publishers, quem enviarão as mensagens de dados e os Subscribers, quem receberão. Sua comunicação é ilustrada na \ref{fig:3.2.0/pub_sub}.
 
 \subsection{Broker}
 \label{subsection:broker}
