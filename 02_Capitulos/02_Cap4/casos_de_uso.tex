@@ -6,15 +6,15 @@ Este capítulo busca demonstrar o funcionamento do sistema em dispositivos com a
 \section{Medição de temperaturas de CPU}
 \label{section:temp_cpu}
 
-\textbf{obs:} \textit{Para reproduzir este teste, é necessário seguir as instruções encontradas no Apêndice}.
+\footnote{\textbf{obs:} \textit{Para reproduzir este teste, é necessário seguir as instruções encontradas no Apêndice}.}
 
 Este exemplo tem como objetivo medir a temperatura da CPU de um console com baseado em suas atividades, serviços e processos em execução. A aplicação pode ser escalada para a obtenção de outras informações da CPU e do sistema, podendo assim disponibilizar análises de desempenho da plataforma, além de montar perfis de uso do sistema e administrar seu uso.
 
 A escalabilidade do sistema será testada em partes, a primeira será analisar medições de temperatura de uma CPU de um console. Em seguida comparar medições de temperatura da CPU com um ESP32 e por último analisar temperatura de múltiplas CPUs.
 
-Para isso precisaremos utilizar uma instância da classe Publisher, disponível em  \ref{subsection:publishers_javascript}, e uma instãncia do Subscriber \ref{subsection:subscribers_javascript} para receber estas temperaturas via MQTT e persisti-las em banco de dados. Ambas as aplicações utilizarão as APIs em Javascript, utilizando Node.js para coletar as informações do sistema, implementar o Publisher, o Subscriber, o driver para MongoDB (também disponível em anexo) e a geração de um gráfico utilizando a plataforma plotly \cite{plotly}. Isso foi implementado no código \ref{subsection:teste_fonte}.
+Para isso precisaremos utilizar uma instância da classe Publisher e uma instãncia do Subscriber para receber estas temperaturas via MQTT e persisti-las em banco de dados. Ambas as aplicações utilizarão as APIs em Javascript, através do Node.js, para coletar as informações do sistema, implementar o Publisher, o Subscriber, o driver para MongoDB (também disponível em anexo) e a geração de um gráfico utilizando a plataforma plotly \cite{plotly}. Isso foi implementado no código \ref{subsection:teste_fonte}.
 
-CPUs são tecnologias feitas por transistores. Milhões de aglomerações de MOSFETS que começam a  ter perda de perfomance no processador conforme o aumento de temperatura, em \cite{jose}, pode-se observar os efeitos do aumento de  temperatura nos parâmetros do MOSFET especialmente na queda de mobilidade e na velocidade de saturação que provocam perda de perfomance. CPUs modernas são capazes de ajustar suas frequências operacionais, a fim de reduzir seu consumo de energia ou fornecer a máxima potência, conforme necessário e possuem também  proteção térmica extremamente robusta. Se a unidade começar a operar acima do limite térmico, ela começará a reduzir a frequência para evitar uma falha catastrófica.
+As CPUs são tecnologias feitas por transistores. Milhões de aglomerações de MOSFETS que começam a  ter perda de desempenho de processamento conforme o aumento de temperatura, em \cite{jose}. Pode-se observar os efeitos do aumento de  temperatura nos parâmetros do MOSFET especialmente na queda de mobilidade e na velocidade de saturação que provocam essa perda de desempenho. CPUs modernas são capazes de ajustar suas frequências operacionais, a fim de reduzir seu consumo de energia ou fornecer a máxima potência. Possuem também proteção térmica extremamente robusta. Se a unidade começar a operar acima do limite térmico, ela começará a reduzir a frequência para evitar uma falha catastrófica.
 
 \begin{figure}[h!]
 \centering
@@ -24,11 +24,11 @@ CPUs são tecnologias feitas por transistores. Milhões de aglomerações de MOS
 \end{figure}
 
 % Falar sobre o diagrama de fluxo
-A \ref{fig:4.1.0/fluxo_controle_temp} mostra todo o fluxo das duas aplicações, o Publisher publica em no tópico \textit{/001/stream:periodic}, a informação coletada a cada T1=3 segundos e espera T2=1 antes de enviar. O Subscriber escuta este tópico e persiste ao chegar uma mensagem de dados pelo Data Stream, ao atingir N amostras (definidas pelo  desenvolvedor), um gráfico de Temperatura da CPU principal pela Data-Hora de inserção é gerado com as últimas inserções no banco.
+A \ref{fig:4.1.0/fluxo_controle_temp} mostra o fluxo das duas aplicações, o Publisher publica em no tópico \textit{/001/stream:periodic}, a informação coletada a cada T1=3 segundos e espera T2=1 antes de enviar. O Subscriber "escuta" este tópico e persiste ao chegar uma mensagem de dados pelo Data Stream, ao atingir N amostras (definidas pelo  desenvolvedor), um gráfico de Temperatura da CPU principal pela Data-Hora de inserção é gerado.
 
 
 % Inserção no banco
-A \ref{fig:4.1.0/compass} mostra o formato de dado armazenado, com a ferramenta Compass para visualização de dados do MongoDB. Repare que lidamos com a estrutura de dados em documento, porém obrigatoriamente todo documento da Interface possui o timestamp da inserção no banco, o campo data é o objeto de dados em medição. A comunicação com o banco pode ser feita por uma instância da classe MongoDataClient em \ref{subsection:subscribers_javascript} que cuida da inserção com o campo \textit{timestamp} e o objeto de dados em \textit{data}.
+A \ref{fig:4.1.0/compass} mostra o formato de dado armazenado, com a ferramenta Compass para visualização de dados do MongoDB. Repare que lidamos com a estrutura de dados em documento, porém obrigatoriamente todo documento possui o timestamp da inserção no banco, o campo data são os dados em medição. A comunicação com o banco pode ser feita por uma instância da classe MongoDataClient (em \ref{subsection:subscribers_javascript}) que cuida da inserção do campo \textit{timestamp} e do objeto de dados em \textit{data}.
 
 \begin{figure}[h!]
 \centering
@@ -38,7 +38,7 @@ A \ref{fig:4.1.0/compass} mostra o formato de dado armazenado, com a ferramenta 
 \end{figure}
 
 % Visualização com o plotly
-A visualização de dados é feita pela ferramenta Plotly, um serviço que fornece uma interface para criar, editar e analisar gráficos, além de disponibilizar links públicos para acesso deste gráfico a terceiros, Basta criar uma conta, gratuíta ou paga, e o usuário poderá criar gráficos na plataforma web ou através de APIs implementadas em múltiplas linguagens de programação conhecidas. A aplicação do Subscriber utiliza da segunda opção com o módulo plotly.js, a implementação em Javascript da plataforma. A cada N amostras são produzidos gráficos como o da  \ref{fig:4.1.0/cpu-temp_1}.
+A visualização de dados é feita pela ferramenta Plotly, um serviço que fornece uma interface para criar, editar e analisar gráficos, além de disponibilizar links públicos para acesso deste gráfico a terceiros. Basta criar uma conta, gratuita ou paga, e o usuário poderá criar gráficos na plataforma web ou através de APIs implementadas em múltiplas linguagens de programação conhecidas. A aplicação do Subscriber utiliza a segunda opção com o módulo plotly.js, que é a implementação em Javascript da plataforma. A cada N amostras são produzidos gráficos como o da  \ref{fig:4.1.0/cpu-temp_1}.
 
 
 \begin{figure}[h!]
@@ -48,10 +48,10 @@ A visualização de dados é feita pela ferramenta Plotly, um serviço que forne
 \label{fig:4.1.0/cpu-temp_1}
 \end{figure}
 
-A \ref{fig:4.1.0/cpu-temp_1} mostra a variação da temperatura de uma CPU da Intel Core I7 em três momentos. O gráfico começa no primero momento onde só os processos básicos do computador estão em execução, mantendo a temperatura constante, logo em seguida entra o momento onde o computador está hibernando o que leva a uma pequena baixa na temperatura. O terceiro momento descreve o comportamento quando o computador executa o MATLAB em um script que exige capacidade de processamento, causando uma leve alta de temperatura, mas não tão lata devido a capacidade do processador e depois estabilizando e voltando ao primeiro momento. Com isso fechando o ciclo das aplicações.
+A \ref{fig:4.1.0/cpu-temp_1} mostra a variação da temperatura de uma CPU da Intel Core I7 em três momentos. O gráfico começa no primero momento onde só os processos básicos do computador estão em execução, mantendo a temperatura constante, logo em seguida entra o momento onde o computador está hibernando o que leva a uma pequena redução na temperatura. O terceiro momento descreve o comportamento quando o computador executa o MATLAB em um script que exige capacidade de processamento, causando uma leve alta de temperatura e depois estabilizando e voltando ao primeiro momento. Com isso fechando o ciclo das aplicações.
 
 
-Finalizada a medição de uma CPU, pode-se escalar para uma Análise mais elaborada, junto as medições desta CPU core i7, foi acrescentada uma aplicação contendo um Publisher em um ESP32. Conforme descrito no capítulo anterior na \ref{fig:3.3.4/esp32-arch}, o ESP32 é um MCU que possui módulos WiFi e sensor de temperatura interno, facilitando a medição, como trata-se de um Microcontrolador foi utilizado a implentação em C++ \ref{subsection:teste-plataformas}, uma implementação síncrona.
+Finalizada a medição de uma CPU, pode-se escalar para uma Análise mais elaborada. Além das medições desta CPU core i7, foi acrescentada uma aplicação contendo um Publisher em um ESP32. Conforme descrito no capítulo anterior na \ref{fig:3.3.4/esp32-arch}, o ESP32 é um MCU que possui módulos WiFi e sensor de temperatura interno, facilitando a medição, como trata-se de um Microcontrolador uma implementação síncrona.
 
 
 \begin{figure}[h!]
@@ -61,21 +61,21 @@ Finalizada a medição de uma CPU, pode-se escalar para uma Análise mais elabor
 \label{fig:temp-devices-3}
 \end{figure}
 
-Ambas as plataformas foram configuradas para enviar informações de temperatura com intervalos de um segundo, durante um período de cerca de uma hora e meia, ao completar 10 mil amostras totais, um gráfico é gerado. Cada plataforma contribui com cerca de metade das amostras, porém cada uma possui uma rotina e capacidade de processamento, fora o tempo de envio para Broker, é de se esperar que o número de amostras de cada um não seja igual.
-Pela \ref{fig:temp-devices-3} pode-se observar as diferenças de temperatura e o comportamento das duas CPUS. O ESP32 com sua arquitetura mais simples, mantem-se relativamente constante a 30 graus Celsius,  isso pode ser explicado devido ao fato do ESP estar rodando somente um programa devido suas limitações.
-A CPU i7 varia sua temperatura em torno de 50 graus Celsius, possuindo variações mais bruscas, devido ao fato do processador está executando múltiplo processos. Durante este experimento o computado da CPU foi usado normalmente, passando por cenários de hibernação até o uso do Browser, recebendo requisições de páginas da web, assistindo vídeos e áudios, provocando as variações de temperatura semelhantes ao primeiro teste.
+Ambas as plataformas foram configuradas para enviar informações de temperatura com intervalos de um segundo, durante um período de cerca de uma hora e meia, ao completar 10 mil amostras totais, um gráfico é gerado. Cada plataforma contribui com cerca de metade das amostras, porém cada uma possui uma rotina e capacidade de processamento, fora o tempo de envio para Broker. É de se esperar que o número de amostras de cada um sejam diferentes entre si.
+Pela \ref{fig:temp-devices-3}, pode-se observar as diferenças de temperatura e o comportamento das duas CPUS. O ESP32 com sua arquitetura mais simples, mantém-se relativamente constante a 30 graus Celsius, por estar rodando somente um programa devido suas limitações.
+A CPU i7 apresenta temperatura em torno de 50 graus Celsius, possuindo variações mais bruscas, decorrente do processador está executando múltiplo processos. Durante este experimento o computador da CPU foi usado normalmente, passando por cenários de hibernação até o uso do Browser, recebendo requisições de páginas da web, reproduzindo vídeos e áudios, provocando as variações de temperatura semelhantes ao primeiro teste.
 
 
-Por último o sistema foi utilizado em um teste em múltiplos computadores com processadores distintos no Laboratório PROSAICO. A finalidade foi observar o comportamento e a robustês da aplicação ao receber dados de múltiplas fontes em larga escala (cerca de 15 mil amostras totais no banco).
+Por último o sistema foi utilizado em um teste em múltiplos computadores com processadores distintos no Laboratório PROSAICO. A finalidade foi observar o comportamento e a robustez da aplicação ao receber dados de múltiplas fontes em larga escala (cerca de 15 mil amostras totais no banco).
 
 \begin{figure}[h!]
 \centering
 \includegraphics[width=16cm]{./02_Capitulos/02_Cap4/figures/temp-devices-5}
-\caption{Comparação das temperaturas em múltiplos processandores}
+\caption{Comparação das temperaturas em múltiplos processadores.}
 \label{fig:temp-devices-5}
 \end{figure}
 
-Na \ref{fig:temp-devices-5}, observa-se vários níveis de temperatura média entre os processadores, todos executando processos comuns dos sistemas operacionais em máquinas Windows e Linux. Esta diferença está atrelada aos fatores de resfriagem térmica e a capacidade de processamento. Vale ressaltar alguns comportamentos. Os dois processadores de temperatura mais baixa, por volta de 30 graus Celsius possuem gabinetes mais novos e apresentam um sistema de resfriamento melhor que os mais antigos. Já o processador que registrou uma maior temperatura média, fora o processador do computador usado como servidor Web e IoT do laboratório, hospedando o Broker Mosquitto do sistema, inclusive. Dois fatores contribuiram para essa mudança abrupta de tecnologia, os processos executados dos serviços, porém majoritariamente pela manutenção do resfriamento do processador, foi detectado que a CPU estava sem pasta térmica, grande responsável pela troca de calor na própria.
+Na \ref{fig:temp-devices-5}, observam-se vários níveis de temperatura média entre os processadores, todos eles executando processos comuns dos sistemas operacionais em máquinas Windows e Linux. Esta diferença está atrelada aos fatores de resfriamento térmico e a capacidade de processamento. Vale ressaltar alguns comportamentos. Os dois processadores de temperatura mais baixa, por volta de 30 graus Celsius possuem gabinetes mais novos e apresentam um sistema de resfriamento melhor que os mais antigos. Já o processador que registrou uma maior temperatura média, fora o processador do computador usado como servidor Web e IoT do laboratório, hospedando o Broker Mosquitto do sistema, inclusive. Dois fatores contribuiram para essa mudança abrupta de tecnologia, os processos executados dos serviços, porém majoritariamente pela manutenção do resfriamento do processador, foi detectado que a CPU estava sem pasta térmica, grande responsável pela troca de calor na própria.
 
 
 %\section{Aplicação: Automação Residencial}
