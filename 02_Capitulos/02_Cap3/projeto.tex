@@ -7,14 +7,13 @@ A arquitetura Publish/Subscribe define as configurações gerais do sistema, nã
 
 O protocolo consiste em configurações de uma abstração de um canal de envio de dados chamado Data Stream mostrado em \ref{fig:3.1.0/data_stream}, no qual transitam dados em uma determinada velocidade, podendo conter um limite de pacote de dados. Nas pontas desse canal estão os Publishers e Subscribers, descritos na seção \ref{subsection:publishers_subscribers}. Este conceito permite  que a interface possa reagir a limitações de transmissão, como congestionamento na rede. O desenvolvedor irá se preocupar somente com as configurações do canal.
 
-
 \section{Data Streams}
 \label{section:data_stream}
 
 Um Data Stream é uma parte da interface que permite adicionar configurações de como o dado será enviado pelo Publisher  para lidar com problemas na transmissão, como o próprio cenário de congestionamento da rede já citado. As configurações podem ser enviadas (ou alteradas) pelo Subscriber, permitindo configurações dinâmicas para o Data Stream utilizado na transmissão. A configuração pode lidar com qualquer aspecto do envio de dados, como o tamanho das mensagens enviadas, ou a taxa de envio ou no próprio formato de mensagem.
 
 
-Publishers são dispositivos que criam Data Stream  e enviam dados por estes, regulam o processamento dos dados, estipulam limites de tamanho de cada pacote de dado e determinam o intervalo de envio de pacotes. O protocolo permite que os Publishers enviem os dados e também permite que outros dispositivos possam passar configurações remotamente para modificar os parâmetros de cada Data Stream, como o intervalo de envio ou a adição de um novo parâmetro (como um limite de dados por mensagem, por exemplo) a ser adicionado a configuração. 
+Publishers são dispositivos que criam Data Stream  e enviam dados por esses, regulam o processamento dos dados, estipulam limites de tamanho de cada pacote de dado e determinam o intervalo de envio de pacotes. O protocolo permite que os Publishers enviem os dados e também permite que outros dispositivos possam passar configurações remotamente para modificar os parâmetros de cada Data Stream, como o intervalo de envio ou a adição de um novo parâmetro (como um limite de dados por mensagem, por exemplo) a ser adicionado a configuração. 
 
 \begin{figure}[h!]
 \centering
@@ -68,7 +67,7 @@ A camada de aquisição apresenta a implementação dos Publishers, que enviam o
 \subsection{Sistemas Embarcados}
 \label{subsubsection:embarcados}
 
-Sistemas Embarcados, são sistemas alimentados por baterias, sem alimentação de rede elétrica, portáteis, econômicos, com sistemas de controles geralmente feitos por micro-controladores ou microprocessadores, podendo contemplar sistemas operacionais simples. Com essa descrição, pode-se imaginar que estes dispositivos possuem processamento, energia e desempenho limitados. Neste caso, foi necessário a criação de uma implementação de interface leve, que não consuma muito armazenamento e processamento do sistema embarcado, e eficiente no consumo de energia.
+Sistemas Embarcados, são sistemas geralmente alimentados por baterias, sem alimentação de rede elétrica, portáteis, econômicos, com sistemas de controles , na maioria dos casos, feitos por micro-controladores ou microprocessadores, podendo contemplar sistemas operacionais simples. Com essa descrição, pode-se imaginar que esses dispositivos possuem processamento, energia e desempenho limitados. Neste caso, foi necessário a criação de uma implementação de interface leve, que não consuma muito armazenamento e processamento do sistema embarcado, e eficiente no consumo de energia.
 
 Foram escolhidas para a implementação em embarcados as plataformas microcontroladas com arquitetura Espressif \cite{espressif}, como a arquitetura ESP32 que contempla MCUs(Micro-Controller Units), módulos WiFi, sensores internos, entradas e saídas analógicas e digitais e até Bluetooth (não utilizado na versão atual), mostrados na \ref{fig:3.3.4/esp32-arch}. Pela descrição técnica pode-se ver um poder de processamento maior que um Arduino \cite{arduino}, muito utilizado nessas aplicações e que também é compatível com a interface se adicionado shields WiFi. O ESP utiliza linguagem C++ \cite{c++} com framework Arduino para implementar os Publisher e os Data Stream contidos neles no ESP32.
 
@@ -108,7 +107,7 @@ possuem muito menos funcionalidades que um console gerido por um sistema operaci
 \subsection{Arquitetura síncrona em embarcados}
 \label{subsection:embarcados_sinc}
 
-Sistemas embarcados possuem um poder de processamento limitado, apesar da tendência de desenvolver embarcados mais potentes. Estes sistemas são geralmente Micro-controlados, ou seja, com arquiteturas mais simples, geralmente executando instruções de somente um programa compilado para linguagem do MCU e gravado neste. Não há paralelismo, cada instrução é síncrona, ou seja, são executadas uma a uma, pela unidade de processamento.
+Sistemas embarcados possuem um poder de processamento limitado, apesar da tendência de desenvolver embarcados mais potentes. Esses sistemas são geralmente Micro-controlados, ou seja, com arquiteturas mais simples, geralmente executando instruções de somente um programa compilado para linguagem do MCU e gravado neste. Não há paralelismo, cada instrução é síncrona, ou seja, são executadas uma a uma, pela unidade de processamento.
 
 \begin{figure}[h!]
 \centering
@@ -141,12 +140,12 @@ Consoles são dispositivos que possuem uma Arquitetura mais complexa, consequent
 \label{fig:async-implementation}
 \end{figure}
 
-A \ref{fig:async-implementation} mostra o funcionamento simplificado das aplicações de Publisher e Subscriber em Node.js. A aplicação faz as configurações específicas de cada objeto Publisher ou Subscriber e logo após entra em um Loop de eventos, onde existem eventos de Conexão com a rede e com o Broker, e de envio/recebimento de mensagens, entre outros. Estes eventos quando são acionados pelo sistema, executam callbacks, funções assíncronas definidas e associadas a um evento. Esses callbacks são gerenciados internamente pelo Node.js e direcionadas ao loop de eventos.
+A \ref{fig:async-implementation} mostra o funcionamento simplificado das aplicações de Publisher e Subscriber em Node.js. A aplicação faz as configurações específicas de cada objeto Publisher ou Subscriber e logo após entra em um Loop de eventos, onde existem eventos de Conexão com a rede e com o Broker, e de envio/recebimento de mensagens, entre outros. Esses eventos quando são acionados pelo sistema, executam callbacks, funções assíncronas definidas e associadas a um evento. Esses callbacks são gerenciados internamente pelo Node.js e direcionadas ao loop de eventos.
 
 \section{Indexação de dados e Timestamp}
 \label{section:timestamp}
 
-Na seção, \ref{section:bancos_IoT} foram discutidos estruturas da organização de dados e o formato de armazenamento de dados como o formato de documento e séries de tempo. É importante que estes formatos tenham formas eficientes de indexação, de modo a facilitar a busca e a análise de dados.
+Na seção, \ref{section:bancos_IoT} foram discutidos estruturas da organização de dados e o formato de armazenamento de dados como o formato de documento e séries de tempo. É importante que esses formatos tenham formas eficientes de indexação, de modo a facilitar a busca e a análise de dados.
 
 Em uma aplicação de IoT, que envolve coleta de dados em tempo real, é fundamental, independentemente do formato escolhido, a data e hora da coleta do dado. Isto permite a análise dos dados ao longo do tempo. Aplicações de decisão e análise utilizam ferramentas estatística com base nas ocorrências temporais, projetando previsões e classificação. No projeto atual, foi implementado o MongoDB, que é um banco de dados de documentos. Cada documento é indexado por uma identificação única como mostrado na \ref{fig:document-model}, permitindo também criar relações entre documentos.
 

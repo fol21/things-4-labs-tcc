@@ -36,7 +36,7 @@ A \ref{fig:4.1.0/compass} mostra o formato de dado armazenado, com a ferramenta 
 \end{figure}
 
 % Visualização com o plotly
-A visualização de dados é feita pela ferramenta Plotly, um serviço que fornece uma interface para criar, editar e analisar gráficos, além de disponibilizar links públicos para acesso deste gráfico a terceiros. Basta criar uma conta, gratuita ou paga, e o usuário poderá criar gráficos na plataforma web ou através de APIs implementadas em múltiplas linguagens de programação conhecidas. A aplicação do Subscriber utiliza a segunda opção com o módulo plotly.js, que é a implementação em Javascript da plataforma. A cada N amostras são produzidos gráficos como o da  \ref{fig:4.1.0/cpu-temp_1}.
+A visualização de dados é feita pela ferramenta Plotly, um serviço que fornece uma interface para criar, editar e analisar gráficos, além de disponibilizar links públicos para acesso aos gráficos na Internet. Basta criar uma conta, gratuita ou paga, e o usuário poderá criar gráficos na plataforma web ou através de APIs implementadas em múltiplas linguagens de programação conhecidas. A aplicação do Subscriber utiliza a segunda opção com o módulo plotly.js, que é a implementação em Javascript da plataforma. A cada N amostras são produzidos gráficos como o da  \ref{fig:4.1.0/cpu-temp_1}.
 
 
 \begin{figure}[h!]
@@ -80,7 +80,7 @@ Na \ref{fig:temp-devices-5}, observam-se vários níveis de temperatura média e
 %\label{section:residencial}
 %
 %Para validar o baixo custo do sistema, as próximas seções tem o foco em simular o orçamento de dois projetos. Um feito para a indústria e outro em redes domésticas para automações residenciais. Serão propostos cenários de aplicações reais, capazes de confirmar a premissa do projeto.
-%Como vimos no capítulo de projetos, o sistema pode ser instalado em plataformas mais sofisticadas, contendo sistemas operacionais e hardware dedicado. Mas nestes cenários utilizaremos o hardware mínimo que é compatível com o sistema e atua satisfatoriamente na aplicação.
+%Como vimos no capítulo de projetos, o sistema pode ser instalado em plataformas mais sofisticadas, contendo sistemas operacionais e hardware dedicado. Mas nesses cenários utilizaremos o hardware mínimo que é compatível com o sistema e atua satisfatoriamente na aplicação.
 %
 %
 %O caso em estudo é a automação parcial de uma residência. Como pode ser visto em  \ref{fig:5.1.0/planta-casa}, a casa possui dois quartos, sala de estar, dois banheiros, cozinha, área de serviço e varanda. O objetivo é monitorar a temperatura local, o consumo de energia, detectar aberturas de portas e janelas de entrada da residência para fins de segurança e acionamento de luzes.
@@ -121,7 +121,7 @@ Na \ref{fig:temp-devices-5}, observam-se vários níveis de temperatura média e
 %\label{section:posto}
 %
 %
-%Essa é uma aplicação que pode ser usado no comércio assim como na indústria. Trata-se de uma central que controla via rede local as iluminações de postos de combustível. Estes possuem uma fonte de luz bastante potente na testeira(Parte de cima do posto) e no Totem (presente na entrada do posto, onde são mostrados os preços dos combustíveis). A infraestrutura do projeto não é complexa, Necessitará de um módulo ESP32 para processamento e envio dos acionamentos, relés de estado sólido, disjuntores de curva C, uma bateria que converte CA em CC, geralmente baterias similares as de celulares satisfazem, isso para o interfaciamento entre a rede elétrica e o sistema digital de controle. Por fim tudo isso ficará presente em uma caixa com vedação perto da caixa de energia do posto.
+%Essa é uma aplicação que pode ser usado no comércio assim como na indústria. Trata-se de uma central que controla via rede local as iluminações de postos de combustível. Esses possuem uma fonte de luz bastante potente na testeira(Parte de cima do posto) e no Totem (presente na entrada do posto, onde são mostrados os preços dos combustíveis). A infraestrutura do projeto não é complexa, Necessitará de um módulo ESP32 para processamento e envio dos acionamentos, relés de estado sólido, disjuntores de curva C, uma bateria que converte CA em CC, geralmente baterias similares as de celulares satisfazem, isso para o interfaciamento entre a rede elétrica e o sistema digital de controle. Por fim tudo isso ficará presente em uma caixa com vedação perto da caixa de energia do posto.
 %
 %Para montar a rede Wifi local, será utilizado um roteador dedicado, configurando uma rede local, não é necessário a conexão a internet neste ponto do projeto. O ESP32 irá se conectar a rede por wps \cite{linksys}, O broker irá ser instalado em um desktop na parte administrativa do posto. O diferencial da aplicação está na aplicação. O frentista responsável poderá acessar a rede e um servidor HTTP irá fornecer uma página web no qual ele pode enviar comandos de acionamento das luzes e até agendar o acionamento destas para um horário específico.
 %

@@ -1,7 +1,7 @@
 \chapter{Conceitos Gerais de IoT}
 \label{chapter:coneceitos}
 
-No capítulo \ref{chapter:intro}, foram vistos as bases para se implementar um projeto de IoT. A área começou a receber fortes investimentos e atenção por volta de 2009 \cite{Rampim:iot} e desde então foram feitas consideráveis implementações utilizando tecnologias e protocolos diferentes. Neste capítulo serão apresentados algumas dessas variantes, para fins de comparação e respaldo para importância e objetivo deste projeto.
+No capítulo \ref{chapter:intro}, foram vistos as bases para se implementar um projeto de IoT. A área começou a receber fortes investimentos e atenção por volta de 2009 \cite{Rampim:iot} e desde então foram feitas consideráveis implementações utilizando tecnologias e protocolos diferentes. Neste capítulo serão apresentados conceitos necessários para o projeto.
 
 \section{As Camadas da IoT}
 \label{section:camadas_iot}
@@ -15,11 +15,11 @@ Uma rede IoT pode ser divida em camadas que exercem funções específicas no tr
 \label{fig:1.2.0/camadas_iot}
 \end{figure}
 
-A primeira camada é a de aquisição de dados, que lida com o mundo físico e captura estes dados através de sensores e conversores A/D, também realiza o processamento para entregar em um formato adequado para transmissão e inteligível para aplicações que recebem os dados. A etapa de aquisição está inserida diretamente no contexto de dados físicos, geralmente são hardwares menos complexos, focados em processamento de dados e entrada e saída com conversão analógico-digital. Se comunicam com sensores ou centrais de controle lógico.
+A primeira camada é a de aquisição de dados, que lida com o mundo físico e captura os dados através de sensores e conversores A/D, também realiza o processamento para entregar em um formato adequado para transmissão e inteligível para aplicações que recebem os dados. A etapa de aquisição está inserida diretamente no contexto de dados físicos, geralmente são hardwares menos complexos, focados em processamento de dados e entrada e saída com conversão analógico-digital. Se comunicam com sensores ou centrais de controle lógico.
 
 A segunda camada é a camada de transmissão, na qual estão, efetivamente, as camadas de rede embutidas. Como o nome já denuncia, ela lida com os aspectos de rede e comunicação para que o dados cheguem seus destinos. Esta camada é o coração do IoT. Na transmissão define quais dispositivos eletrônicos e suas especificação técnicas. Também define como os softwares da camada de aplicação e aquisição devem ser implementados baseado na estrutura da pilha de rede.
 
- E por último temos a camada de aplicação, a mais abrangente e que envolve maior poder computacional. Ela recebe os dados e lida com os processos de aplicação destes dados, seja análise, visualização, armazenamento ou a estruturação dos mesmos. A camada de aplicação encabeça a pilha do IoT. É ela que de fato trata os dados. Ela disponibiliza os dados para o mundo real, podendo exercer múltiplas funções simultâneas incluindo:
+ E por último, a camada de aplicação, a mais abrangente e que envolve maior poder computacional. Ela recebe os dados e lida com os processos de aplicação desses dados, seja análise, visualização, armazenamento ou a estruturação dos mesmos. A camada de aplicação encabeça a pilha do IoT. É ela que de fato trata os dados. Ela disponibiliza os dados para o mundo real, podendo exercer múltiplas funções simultâneas incluindo:
 
 \begin{itemize}
 \item Armazenamento e Análise, através de Bancos de Dados e Serviços;
@@ -43,7 +43,7 @@ Os protocolos construídos com base no TCP/IP são vastamente utilizados e possu
 O protocolo mais simples seria o HTTP, altamente usado na internet, porém não é eficiente no consumo de energia por abrir uma conexão a cada envio de dados. Para minimizar estas desvantagens, foi desenvolvido o CoAP (Constrained Application Protocol) \cite{coap} protocolo nos mesmos moldes do HTTP com arquitetura REST (Representational State Transfer), que define as regras para criação de uma serviços Web, garantindo interoperabilidade entre sistemas e a Internet. Entretanto o CoAP é mais simples, mais leve, com baixo overhead em relação ao HTTP e utilizado em redes locais.
 
 %%% MQTT , Websocket e HTTP %%%
-A interface proposta nesse projeto propõe a arquitetura Publish/Subscribe e se comunicará com Protocolos de aplicações, mesmo que estes não estejam baseados neste tipo de arquitetura . Para critérios de comparação apresenta-se dois protocolos de aplicação construídos sobre o TCP/IP, HTTP e MQTT.
+A interface proposta nesse projeto propõe a arquitetura Publish/Subscribe e se comunicará com Protocolos de aplicações, mesmo que esses não estejam baseados nessa arquitetura . Para critérios de comparação apresenta-se dois protocolos de aplicação construídos sobre o TCP/IP, HTTP e MQTT.
 
 \section{MQTT}
 \label{section:mqtt}
@@ -113,7 +113,7 @@ Qualquer mensagem publicada em um tópico é imediatamente recebida por todos os
 \subsection{Broker}
 \label{subsection:broker}
 
-O Broker é o servidor do padrão Publish/Subscribe, ele efetivamente executa as ordens de publicação (publish) feita por algum cliente para os tópicos que outros clientes estão inscritos (subscribed), possui todas as listas de tópicos, é orientado a conexão e não persiste informações dos clientes, ou seja, em caso de queda de conexão, estes devem se inscrever novamente nos tópicos.  A arquitetura Broker não é exclusividade do MQTT, outros protocolos utilizam esse tipo de implementação em servidores em arquiteturas semelhantes de envio de mensagem, como os Hubs desenvolvidos pela Microsoft na biblioteca SignalR \cite{signalr}.
+O Broker é o servidor do padrão Publish/Subscribe, ele efetivamente executa as ordens de publicação (publish) feita por algum cliente para os tópicos que outros clientes estão inscritos (subscribed), possui todas as listas de tópicos, é orientado a conexão e não persiste informações dos clientes, ou seja, em caso de queda de conexão, os clientes devem se inscrever novamente nos tópicos.  A arquitetura Broker não é exclusividade do MQTT, outros protocolos utilizam esse tipo de implementação em servidores em arquiteturas semelhantes de envio de mensagem, como os Hubs desenvolvidos pela Microsoft na biblioteca SignalR \cite{signalr}.
 
 \begin{figure}[h]
 \centering
@@ -131,7 +131,7 @@ Na figura \ref{fig:3.2.0/broker_pub_sub}, o Broker armazena os tópicos e os Ids
 %% Tipos de MQTT 
 Com a evolução e o uso do protocolo, foram necessárias atualizações que contemplam funcionalidades que atendem  requisitos essenciais para aplicações da indústria. Dentre esses requisitos, tem-se atender dispositivos que não usam a pilha TCP/IP e medidas de segurança da informação nas mensagens enviadas. 
 
-Existe uma gama de dispositivos que utilizam protocolos específicos, não construídos sobre o TCP/I, a exemplo do ZigBee \cite{zigbee}. Para isso foi criada uma versão do MQTT para atender estes tipos de protocolos, substituindo a base TCP/IP por outros protocolos destas camadas, mantendo a camada de aplicação e o padrão Publish/Subscribe.
+Existe uma gama de dispositivos que utilizam protocolos não construídos sobre o TCP/IP, a exemplo do ZigBee \cite{zigbee}. Para isso foi criada uma versão do MQTT para atender esses tipos de protocolos, substituindo a base TCP/IP por outros protocolos destas camadas, mantendo a camada de aplicação e o padrão Publish/Subscribe.
 
 Para resolver questões de segurança, foi criada uma variação do MQTT que adiciona camadas deste quesito ao protocolo de aplicação. Assim como o HTTPS o protocolo MQTTS é construído em cima do protocolo SSL/TLS \cite{ssl}, camada de segurança construídas sobre TCP/IP. Esta camada envolve o processo de encriptação dos cabeçalhos da aplicação e autenticação por certificados. Para poder criar uma conexão é requisitado um certificado SSL, durante o processo de solicitação do certificado SSL, a Autoridade de Certificação validará seus detalhes, permitindo a passagem de dados encriptados.
 
@@ -172,11 +172,11 @@ Como pode ser observado em \cite{Damodaran}, uma aplicação eficiente de Bancos
 
 Comparando as duas estruturas, como mostrado em \ref{fig:3.3.5/b-lsm}, percebe-se que a estrutura LSM sustenta até 2x mais inserções da estrutura B+, hoje os Bancos de Dados modernos utilizam desta vantagem. Aplicações modernas coletam dados constantemente, então a eficiência da operação de escrita feita por um motor de um banco torna-se extremamente relevante, a estrutura LSM leva vantagem neste quesito.
 
-Existem várias abstrações de Bancos de dados. Em \cite{Rautmare-Bhalerao} compara-se e conclui-se que o banco MongoDB, um banco NoSQL possui um tempo de resposta de inserção menor que o MySQL (bancos relacionais), porém o último é mais estável. De fato, bancos NoSQL (bancos não-relacionais) são, em geral, mais leves e possuem uma flexibilidade maior para lidar e estruturar dados, o que fazem estes tipos de Banco mais favoráveis a aplicações de IoT, porém outras estruturas como um banco divido em séries de tempo \cite{timeseries} , onde a indexação dos dados é feita pelo tempo de quando a amostra foi coletada (isso será debatido em \ref{section:timestamp}), mostram-se eficientes com bancos relacionais ou não.
+Existem várias abstrações de Bancos de dados. Em \cite{Rautmare-Bhalerao} compara-se e conclui-se que o banco MongoDB, um banco NoSQL possui um tempo de resposta de inserção menor que o MySQL (bancos relacionais), porém o último é mais estável. De fato, bancos NoSQL (bancos não-relacionais) são, em geral, mais leves e possuem uma flexibilidade maior para lidar e estruturar dados, o que fazem esses tipos de Banco mais favoráveis a aplicações de IoT, porém outras estruturas como um banco divido em séries de tempo \cite{timeseries} , onde a indexação dos dados é feita pelo tempo de quando a amostra foi coletada (isso será debatido em \ref{section:timestamp}), mostram-se eficientes com bancos relacionais ou não.
 
-Outros aspectos podem contribuir para a eficiência de persistência de dados. Criar bancos locais diminuem a latência e a necessecidade de conexão, aumentando a capacidade de inserção de dados, além de ser uma forma de backup de dados. Um banco local, geralmente fica em uma plataforma como em \cite{Paethong-Sato-Namiki}, são bancos leves em aplicações de baixo consumo, devido a capacidade de processamento limitada. Seu papel é geralmente para armazenar os dados quando não há conexão, e quando esta é restabelecida os dados são enviados para um banco remoto com mais capacidade de processamento e aplicações. %% Falar sobre bancos locais.
+Outros aspectos podem contribuir para a eficiência de persistência de dados. Criar bancos locais diminuem a latência e a necessecidade de conexão, aumentando a capacidade de inserção de dados, além de ser uma forma de backup de dados. Um banco local, geralmente fica em uma plataforma como em \cite{Paethong-Sato-Namiki} e são usados, na maioria do casos, para armazenar os dados quando não há conexão. Quando esta é restabelecida os dados são enviados para um banco remoto com mais capacidade de processamento e aplicações. %% Falar sobre bancos locais.
 
-Dentre os bancos estudados, alguns se destacam como o Cassandra, usado pela Netflix para coletar dados sobre o comportamento do usuário na plataforma ou o InfluxDB, um banco em série de temo, feito para aplicações em tempo real. Mas para esse projeto, foi utilizado o MongoDB \cite{mongodb}, um banco NoSQL, leve e de fácil integração com as plataformas utilizadas e que possui implementações de motores que priorizam a eficiência na escrita de dados, como a LSM tree.
+Dentre os bancos estudados, alguns se destacam como o Cassandra, usado pela Netflix para coletar dados sobre o comportamento do usuário na plataforma ou o InfluxDB, um banco em série de temo, feito para aplicações em tempo real. Mas para o projeto, foi utilizado o MongoDB \cite{mongodb}, um banco NoSQL, leve e de fácil integração com as plataformas utilizadas e que possui implementações de motores que priorizam a eficiência na escrita de dados, como a LSM tree.
 
 
 
