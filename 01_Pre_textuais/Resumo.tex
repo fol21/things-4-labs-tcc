@@ -7,14 +7,21 @@
 % O número de folha é o número de páginas do PDF -2. Isto ocorre pois na versão final (capa dura) a capa é removida e as duas primeiras páginas são impressas em uma % folha apenas (frente e verso).
 %
 
+
 $\!$\\
 
-\hspace{-1.3cm}\textbf{LIMA}, Fernando \textit{\setTitulo}. 105 f. Trabalho de Conclusão de Curso~(Engenharia Elétrica ênfase em Sistemas Eletrônicos) - Faculdade de Engenharia, Universidade do Estado do Rio de Janeiro (UERJ), Rio de Janeiro, 2018.
+\hspace{-1.3cm}\textbf{LIMA}, Fernando \textit{\setTitulo}. 83 p. Trabalho de Conclusão de Curso~(Engenharia Elétrica ênfase em Sistemas Eletrônicos) - Faculdade de Engenharia, Universidade do Estado do Rio de Janeiro (UERJ), Rio de Janeiro, 2018.
 
 \vspace{.2cm}
 
-No meio da revolução dos dados, cresce o interesse em sistemas de comunicação entre máquinas e sistemas de compartilhamento e visualização de dados  sobre dispositivos, seja numa fábrica ou em residências. Este trabalho apresenta um sistema para aplicações de internet das coisas(IoT) utilizando MQTT, um protocolo de aplicação para comunicação entre dispositivos que enviam dados telemétricos. É  a \textit{língua franca} para publicação de dados telemétricos via TCP/IP, com persistência de dados em banco MongoDB. O sistema engloba todos os setores de aquisição dos dados a camada de aplicação em consoles, com o objetivo de facilitar a implementação de aplicações eficientes em cada cenário.
+No meio da revolução dos dados, cresce o interesse em sistemas de comunicação entre máquinas e sistemas de compartilhamento e visualização de dados  sobre dispositivos, seja numa fábrica ou em residências. Este trabalho apresenta um sistema para aplicações de internet das coisas(IoT) utilizando MQTT, um protocolo de aplicação para comunicação entre dispositivos que enviam dados telemétrico, com persistência de dados em banco MongoDB. O sistema engloba todos os setores da aquisição de dados a camada de aplicação, com o objetivo de facilitar a implementação de aplicações eficientes em cada cenário.
+
+O sistema também contempla com Data Streams, um canal de dados configurável, permitindo definir parâmetros de como os dados serão transmitidos. Com os Data Streams, é possível que o sistema se adapte dinâmicamente a cenários onde existem dificuldades na transmissão de dados, como problemas na estabilidade de conexão, congestionamento na rede, entre outros.
+
+O projeto também contempla um caso de uso do sistema, onde são feitas medições de temperaturas em CPUs e na unidade micro-controlada ESP32, realizando três comparativos. O primeiro sendo a medição de uma CPU isolada, avaliando seu comportamento, o segundo um comparativo entre uma CPU da Intel e o ESP32 e por último, o comparativo das medições de temperatura das CPUs de múltiplos computadores do laboratório PROSAICO. 
+
+
 
 \vspace{1cm}
 
-\hspace{-1.3cm}Keywords: IoT, MQTT, industry .
+\hspace{-1.3cm}Palavras-Chave: IoT, MQTT, Data Streams .
